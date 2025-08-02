@@ -10,7 +10,6 @@ export default function Landing() {
         <Button>
             <Link href="/student">
                 Go to Student Dashboard  
-                
             </Link>
         </Button>
     </div>
