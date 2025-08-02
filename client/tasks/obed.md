@@ -13,5 +13,8 @@ over view system  Authentication UI
 ## done before 06-08-025
 ## assets and resources to be use in order to mantain ui structure 
 
+main are:
 -https://ui.shadcn.com/
--https://preline.co/index.html
+-https://preline.co/index.
+
+NB: other are optional
