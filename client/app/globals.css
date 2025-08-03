@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@import "preline/variants.css";
+@import "Public/assets/css/obfuscated.min.css";
+@source "../node_modules/preline/dist/*.js";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

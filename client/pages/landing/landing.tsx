@@ -12,6 +12,11 @@ export default function Landing() {
                 Go to Student Dashboard  
             </Link>
         </Button>
+        <Button className='mt-4'>
+            <Link href="/teacher">
+                Go to Teacher Dashboard  
+            </Link>
+        </Button>
     </div>
   )
 }
