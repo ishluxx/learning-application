@@ -14,6 +14,7 @@ import {
 
 import { featuredRooms } from "@/data/rooms"
 import { useRouter } from "next/navigation"
+import AIChatIcon from "@/components/ai/page"
 
 export default function Page() {
     const router = useRouter()
@@ -34,7 +35,7 @@ export default function Page() {
       <SidebarInset>
         <SiteHeader />
          
-
+        <AIChatIcon/>
           {/* Main Content */}
           <main className="max-w-7xl mx-auto py-8 px-6">
             {/* Featured Rooms Section */}
