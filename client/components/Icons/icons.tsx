@@ -1,4 +1,4 @@
-import { LucideProps, LogIn,Users, Mail, Phone,Calendar,FolderIcon,FileText,ThumbsUp,MessageSquare, MapPin, Facebook,Image,Link, Twitter, Linkedin, Instagram } from "lucide-react"
+import { LucideProps, LogIn,Users, Mail, Phone,Calendar,FolderIcon,FileText,ThumbsUp,MessageSquare, MapPin, Facebook,Image,Link, Twitter, Linkedin, Instagram, Calculator, FlaskConical, Landmark, Pen, Code, Briefcase } from "lucide-react"
 
 export const Icons = {
   logo: (props: LucideProps) => (
@@ -34,5 +34,11 @@ export const Icons = {
   twitter: Twitter,
   linkedin: Linkedin,
   instagram: Instagram,
+  calculator: Calculator,
+  flask: FlaskConical,
+  landmark: Landmark,
+  pen: Pen,
+  code: Code,
+  briefcase: Briefcase,
   // Add more icons as needed
 }

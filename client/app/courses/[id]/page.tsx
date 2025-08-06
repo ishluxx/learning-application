@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils"
 
 import { coursesData, Course, CourseSection, CourseItem } from '@/data/courses';
 
+
 export default function CourseLearningPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) { 
   const params = use(paramsPromise); // Unwrap the params Promise
   const course: Course | undefined = coursesData.find((c: Course) => c.id === params.id);
@@ -163,7 +164,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                   <CardContent className="p-0">
                     <div className="relative aspect-video w-full overflow-hidden rounded-lg">
                       <Image
-                        src="/images/How-to-Learn-ReactJS-in-2021.png"
+                        src={course.image || '/images/placeholder-course.png'}
                         alt={currentItem.title || 'Course lesson image'}
                         fill
                         className="object-cover"
@@ -173,7 +174,9 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                 </Card>
 
                 <div className="space-y-6 mb-8">
-                  {currentItem.completed ? (
+                  {/* This is not necessary on this section */}
+
+                  {/* {currentItem.completed ? (
                     <div className="bg-green-50 border border-green-200 rounded-lg p-6">
                       <h2 className="text-xl font-semibold text-green-800 mb-3">🎉 Lesson Completed!</h2>
                       <p className="text-green-700 leading-relaxed">
@@ -189,7 +192,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                         <li>• Best practices and tips</li>
                       </ul>
                     </div>
-                  )}
+                  )} */}
 
                   <div className="prose max-w-none">
                     {currentItem.content ? (
