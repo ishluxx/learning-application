@@ -44,7 +44,7 @@ export default function RoomPage() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {rooms.map((room: any) => {
-          const IconComponent = Icons[room.icon as keyof typeof Icons];
+           const IconComponent = Icons[room.icon as keyof typeof Icons] || Icons.folder;
 
           // Handle rooms based on their status:
           if (room.status === 'joined') {
