@@ -1,6 +1,9 @@
 import { AppSidebar } from "@/components/student/app-sidebar"
-import { SectionCards } from "@/components/student/section-cards"
+import { SectionCards } from "@/components/student/account/section-cards"
 import { SiteHeader } from "@/components/student/site-header"
+import { IconUserCircle, IconCreditCard, IconNotification } from "@tabler/icons-react"
+import Link from "next/link"
+import { Card } from "@/components/ui/card"
 import {
   SidebarInset,
   SidebarProvider,
