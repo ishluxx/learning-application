@@ -139,8 +139,27 @@ const Page = () => {
     }
   ])
 
-  const [newPost, setNewPost] = useState("")
     const [isOpen, setIsOpen] = React.useState(true)
+    const [newPost, setNewPost] = useState("");
+  const [linkMode, setLinkMode] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleUpload = () => {
+    if (linkMode && newPost.trim() !== "") {
+      setMessage("Link was uploaded");
+    } else {
+      setMessage("Please upload a PDF file");
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type === "application/pdf") {
+      setMessage("File was uploaded");
+    } else {
+      setMessage("Only PDF files are allowed");
+    }
+  };
   
     React.useEffect(() => {
       setIsOpen(false)
@@ -400,28 +419,49 @@ const Page = () => {
                 ))}
               </div> }
               {activeTab==='resources' && <div className="rounded-lg shadow">
-                  <div className="bg-gray-50 dark:bg-[#141414] rounded-lg p-4 mb-4">
-                  <h1 className="dark:text-gray-50 text-[#141414] mb-5 font-bold flex gap-1"><span><IconUpload/> </span>Upload Resources</h1>
-                      <Input
-                        value={newPost}
-                        onChange={(e) => setNewPost(e.target.value)}
-                        placeholder="Upload Content"
-                        className="bg-gray-50 dark:bg-gray-700 border-none"
-                      />
-                      <div className="flex justify-between mt-2">
-                        <div className="flex gap-2">
-                          <Button variant="ghost" size="sm">
-                            <Icons.image className="h-4 w-4 mr-1" />
-                            Media
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Icons.link className="h-4 w-4 mr-1" />
-                            Link
-                          </Button>
-                        </div>
-                        <Button size="sm" onClick={handlePost}>Upload</Button>
-                      </div>
-                </div>
+                   <div className="bg-gray-50 dark:bg-[#141414] rounded-lg p-4 mb-4">
+      <h1 className="dark:text-gray-50 text-[#141414] mb-5 font-bold flex gap-1">
+        <IconUpload /> Upload Resources
+      </h1>
+
+      {linkMode ? (
+        <Input
+          value={newPost}
+          onChange={(e) => setNewPost(e.target.value)}
+          placeholder="Paste link here"
+          className="bg-gray-50 dark:bg-gray-700 border-none"
+        />
+      ) : (
+        <Input
+          type="file"
+          accept="application/pdf"
+          onChange={handleFileChange}
+          className="bg-gray-50 dark:bg-gray-700 border-none"
+        />
+      )}
+
+      <div className="flex justify-between mt-2">
+        <div className="flex gap-2">
+          <Button variant="ghost" size="sm" onClick={() => setLinkMode(false)}>
+            <Icons.image className="h-4 w-4 mr-1" />
+            Media
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => setLinkMode(true)}>
+            <Icons.link className="h-4 w-4 mr-1" />
+            Link
+          </Button>
+        </div>
+        <Button size="sm" onClick={handlePost}>
+          Upload
+        </Button>
+      </div>
+
+      {message && (
+        <p className="mt-2 text-sm dark:text-green-400 text-green-600">
+          {message}
+        </p>
+      )}
+    </div>
                  <div className="rounded-lg shadow p-6 bg-gray-50 dark:bg-[#141414]">
                 <h3 className="font-semibold flex items-center gap-2">
                   <Icons.folder className="h-5 w-5" />
