@@ -2,6 +2,7 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
   return (
+
     <footer className="bg-gray-60 dark:bg-[#1a1a1a] dark:text-gray-100 border-t border-gray-400">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -50,13 +51,14 @@ export default function Footer() {
                 Subscribe
               </button>
             </div>
-          </div>
+                </div>
+                <div className="mt-8 pt-8 text-center text-black">
+                  <p>&copy; 2025 Your E-Learning Platform. All rights reserved.</p>
+                </div>
+             
         </div>
-          <div className="mt-8 pt-8 text-center text-black">
-          <p>&copy; 2025 Your E-Learning Platform. All rights reserved.</p>
-        </div>
-        
       </div>
     </footer>
   );
 }
+       

@@ -1,7 +1,9 @@
+// "use client";
 import { ThemeProvider } from "@/components/theme-provider"
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import '@/public/vendor/preline/obfuscated.min.css';
 import PrelineScriptWrapper from '@/components/PrelineScriptWrapper';
 
 const geistSans = Geist({
@@ -31,7 +33,7 @@ export default function RootLayout({
       >
            <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >

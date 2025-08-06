@@ -87,7 +87,7 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <IconUserCircle />
-                <Link href="/student/account">Account</Link> 
+                <Link href="/student/account">Account</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <IconNotification />

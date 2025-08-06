@@ -1,7 +1,16 @@
+
 import LandingHeader from "@/components/ui/landingheader";
-import Footer from './footer';
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+// import Footer from './footer';
+// import { Button } from "@/components/ui/button";
+// import Link from "next/link";
+
+import React from 'react'
+import { Button } from "@/components/ui/button"
+import Link from 'next/link'
+import MainPage from './main'
+import Footer from './footer'
+import Header from './header'
+
 
 import { 
   BookOpen, 
@@ -17,6 +26,7 @@ import {
 
 function LandingPage() {
   return (
+
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6">
       <LandingHeader />
       
@@ -199,6 +209,16 @@ function LandingPage() {
       <Footer />
     </div>
   );
+
+    // <>
+    // <div className="dark:bg-neutral-900">
+    //     <Header/>
+    //     <MainPage/>
+    //     <Footer/>
+    // </div>
+    // </>
+  
+
 }
 
 type FeatureCardProps = {
