@@ -94,7 +94,22 @@ export default function AIChatIcon() {
           <Bot size={28} />
         </button>
       ) : (
-        <Card className="w-[360px] h-[500px] flex flex-col shadow-2xl rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1a1a]">
+        <Card className="w-[360px] h-[500px] flex flex-col shadow-2xl rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1a1a] relative">
+          {/* Close Button */}
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              setQuestion("");
+              setAnswer("");
+              setIsListening(false);
+            }}
+            aria-label="Close chat"
+            title="Close chat"
+            className="absolute top-3 right-3 text-white bg-blue-700 hover:bg-blue-800 rounded-full p-1 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <X size={18} />
+          </button>
+
           {/* Header */}
           <div className="bg-blue-600 text-white p-4 flex flex-col justify-center items-center space-y-1">
             <Bot className="w-6 h-6" />
