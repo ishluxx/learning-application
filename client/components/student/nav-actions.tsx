@@ -101,15 +101,24 @@ const data = [
 
 export function NavActions() {
   const [isOpen, setIsOpen] = React.useState(true)
+  const [showAlerts, setShowAlerts] = React.useState(false)
 
   React.useEffect(() => {
     setIsOpen(false)
   }, [])
 
+  const handleMenuClick = (item: { label: string; icon: React.ElementType }) => {
+    if (item.label === "Notifications") {
+      setShowAlerts(true)
+    } else {
+      setIsOpen(false)
+      setShowAlerts(false)
+    }
+  }
+
   return (
     <div className="flex items-center gap-2 text-sm">
-      
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <Popover open={isOpen} onOpenChange={o => { setIsOpen(o); if (!o) setShowAlerts(false) }}>
         <PopoverTrigger asChild>
           <Button
             variant="ghost"
@@ -123,25 +132,40 @@ export function NavActions() {
           className="w-56 overflow-hidden rounded-lg p-0"
           align="end"
         >
-          <Sidebar collapsible="none" className="bg-transparent">
-            <SidebarContent>
-              {data.map((group, index) => (
-                <SidebarGroup key={index} className="border-b last:border-none">
-                  <SidebarGroupContent className="gap-0">
-                    <SidebarMenu>
-                      {group.map((item, index) => (
-                        <SidebarMenuItem key={index}>
-                          <SidebarMenuButton>
-                            <item.icon /> <span>{item.label}</span>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      ))}
-                    </SidebarMenu>
-                  </SidebarGroupContent>
-                </SidebarGroup>
-              ))}
-            </SidebarContent>
-          </Sidebar>
+          {showAlerts ? (
+            <div className="p-4 ">
+              <h3 className="mb-4 text-base font-semibold">Alerts</h3>
+              <ul className="space-y-2">
+                <li className="bg-green-100 text-green-800 rounded px-2 py-1 text-sm">New live course has been started</li>
+                <li className="bg-green-100 text-green-800 rounded px-2 py-1 text-sm">New message received</li>
+                <li className="bg-green-100 text-blue-800 rounded px-2 py-1 text-sm">Assignment due tomorrow</li>
+                <li className="bg-green-100 text-green-800 rounded px-2 py-1 text-sm">Profile updated successfully</li>
+              </ul>
+              <Button variant="outline" size="sm" className="mt-4 w-full" onClick={() => setIsOpen(false)}>
+                Close
+              </Button>
+            </div>
+          ) : (
+            <Sidebar collapsible="none" className="bg-transparent">
+              <SidebarContent>
+                {data.map((group, index) => (
+                  <SidebarGroup key={index} className="border-b last:border-none">
+                    <SidebarGroupContent className="gap-0">
+                      <SidebarMenu>
+                        {group.map((item, index) => (
+                          <SidebarMenuItem key={index}>
+                            <SidebarMenuButton onClick={() => handleMenuClick(item)}>
+                              <item.icon /> <span>{item.label}</span>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        ))}
+                      </SidebarMenu>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                ))}
+              </SidebarContent>
+            </Sidebar>
+          )}
         </PopoverContent>
       </Popover>
     </div>
