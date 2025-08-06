@@ -51,12 +51,13 @@ export default function Footer() {
                 Subscribe
               </button>
             </div>
+            
+                
                 </div>
-                <div className="mt-8 pt-8 text-center text-black">
-                  <p>&copy; 2025 Your E-Learning Platform. All rights reserved.</p>
-                </div>
+                
              
         </div>
+        
       </div>
     </footer>
   );

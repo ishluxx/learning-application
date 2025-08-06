@@ -180,23 +180,23 @@ function LandingPage() {
                 <input
                   type="text"
                   placeholder="Your Name"
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                  className="w-full p-3 border rounded-lg  focus:ring-primary focus:outline-none"
                 />
                 <input
                   type="email"
                   placeholder="Your Email"
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                  className="w-full p-3 border rounded-lg focus:ring-primary focus:outline-none"
                 />
               </div>
               <input
                 type="text"
                 placeholder="Subject"
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                className="w-full p-3 border rounded-lg focus:ring-primary focus:outline-none"
               />
               <textarea
                 placeholder="Your Message"
                 rows={4}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                className="w-full p-3 border rounded-lg focus:ring-primary focus:outline-none"
               ></textarea>
               <Button type="submit" className="w-full">
                 Send Message
