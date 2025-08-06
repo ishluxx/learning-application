@@ -1,24 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { Bot, MessageCircle, X } from 'lucide-react';
+import { Bot, X } from 'lucide-react';
 import { Card } from '../ui/card';
+import { Button } from '../ui/button';
 
-interface AIChatIconProps {
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-  iconSize?: number;
-  iconColor?: string;
-}
-
-export default function AIChatIcon({
-  iconSize = 40,
-  iconColor = 'currentColor',
-}: AIChatIconProps) {
+export default function AIChatIcon() {
   const [isOpen, setIsOpen] = useState(false);
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,78 +30,77 @@ export default function AIChatIcon({
         }),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
       const data = await response.json();
-      const aiResponse = data.choices[0]?.message?.content || 'No response received';
+      const aiResponse = data.choices?.[0]?.message?.content || 'No response received';
       setAnswer(aiResponse);
     } catch (error) {
-      console.error('Error getting DeepSeek response:', error);
-      setAnswer('Sorry, there was an error processing your question.');
+      console.error(error);
+      setAnswer('Sorry, there was an error.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className={`fixed bottom-2 right-4 z-50`}>
+    <div className="fixed bottom-4 right-4 z-50">
       {!isOpen ? (
         <button
           onClick={() => setIsOpen(true)}
-          className="p-3 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition-colors"
-          aria-label="Open AI chat"
+          className="p-3 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700"
+          aria-label="Open AI Chat"
         >
-          <Bot size={iconSize} color={iconColor} />
+          <Bot />
         </button>
       ) : (
-        <Card className="w-80">
-          <div className="bg-blue-600 p-3 text-white flex justify-between items-center">
-            <h3 className="font-medium">AI Assistant</h3>
+        <Card className="w-[340px] h-[450px] flex flex-col shadow-xl rounded-xl overflow-hidden border border-gray-300">
+          {/* Header */}
+          <div className="bg-blue-600 text-white p-3 flex justify-between items-center">
+            <div className="flex items-center gap-2 font-semibold text-sm">
+              <Bot className="w-4 h-4" />
+              Chat with us!
+            </div>
             <button
               onClick={() => {
                 setIsOpen(false);
                 setQuestion('');
                 setAnswer('');
               }}
-              aria-label="Close chat"
+              className="hover:text-gray-300"
             >
-              <X size={24} />
+              <X size={18} />
             </button>
           </div>
 
-          <div className="p-4 max-h-96 overflow-y-auto">
+          {/* Messages */}
+          <div className="flex-1 p-3 overflow-y-auto text-sm space-y-3 bg-white">
+            <div className="text-gray-600 bg-gray-100 p-3 rounded-md">
+              Hi! How can I assist you today?
+            </div>
             {answer && (
-              <div className="mb-4 p-3 bg-gray-50 rounded-md">
-                <p className="text-gray-800">{answer}</p>
+              <div className="text-gray-800 bg-blue-50 p-3 rounded-md whitespace-pre-wrap">
+                {answer}
               </div>
             )}
-
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label htmlFor="ai-question" className="block text-sm font-medium text-gray-700 mb-1">
-                  Ask a question
-                </label>
-                <textarea
-                  id="ai-question"
-                  rows={3}
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="How can I help you today?"
-                  disabled={isLoading}
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={isLoading || !question.trim()}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? 'Processing...' : 'Ask AI'}
-              </button>
-            </form>
           </div>
+
+          {/* Input area */}
+          <form onSubmit={handleSubmit} className="p-3 border-t bg-white flex gap-2">
+            <input
+              type="text"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder="Type your message..."
+              disabled={isLoading}
+              className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+            />
+            <Button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+              disabled={isLoading || !question.trim()}
+            >
+              {isLoading ? 'Processing...' : 'Send'}
+            </Button>
+          </form>
         </Card>
       )}
     </div>
