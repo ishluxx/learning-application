@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { Eye, Search } from "lucide-react"
 
+
 // Helper function to determine course status
 // Returns 'Completed', 'In Progress', or 'Not Started' based on lesson completion
 function getCourseStatus(course: Course): "Completed" | "In Progress" | "Not Started" {
@@ -76,14 +77,14 @@ export default function CoursesPage() {
                   placeholder="Search courses by title, instructor, or description..."
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  className="w-full rounded-md border px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-black dark:text-white dark:border-gray-800"
+                  className="w-full rounded-md  px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-black dark:text-white "
                 />
                 <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
               </div>
               <select
                 value={level}
                 onChange={e => setLevel(e.target.value)}
-                className="rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-black dark:text-white dark:border-gray-800"
+                className="rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-black dark:text-white"
               >
                 <option value="">All Levels</option>
                 {levels.map(lvl => (
@@ -93,7 +94,7 @@ export default function CoursesPage() {
               <select
                 value={statusFilter}
                 onChange={e => setStatusFilter(e.target.value)}
-                className="rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-black dark:text-white dark:border-gray-800"
+                className="rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-black dark:text-white"
               >
                 <option value="">All Statuses</option>
                 <option value="Completed">Completed</option>
@@ -101,6 +102,8 @@ export default function CoursesPage() {
                 <option value="Not Started">Not Started</option>
               </select>
             </div>
+
+
             {/* Course Cards: each card shows course info, status, and lessons */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
               {filteredCourses.length === 0 ? (
@@ -122,10 +125,10 @@ export default function CoursesPage() {
                   }
 
                   return (
-                    <Card key={course.id} className="flex flex-col h-full bg-white dark:bg-black rounded-2xl shadow-lg hover:shadow-2xl transition-shadow border border-blue-100 dark:border-gray-800 group">
+                    <Card key={course.id} className="flex flex-col h-full bg-white dark:bg-black rounded-2xl shadow-lg hover:shadow-2xl transition-shadow  group">
                       <CardHeader>
                         <div className="flex justify-between items-start mb-2">
-                          <CardTitle className="text-xl font-bold text-blue-900 dark:text-white group-hover:text-blue-700 transition">
+                          <CardTitle className="text-xl font-bold text-blue-900 dark:text-white transition">
                             {course.title}
                           </CardTitle>
                           <span className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold shadow-sm ", statusColor)} aria-label={status}>
