@@ -78,7 +78,7 @@ export const coursesData: Course[] = [
   },
   {
     id: '3',
-    title: 'Advanced Machine Learning',
+    title: ' Machine Learning',
     description: 'Master advanced TypeScript concepts for large-scale applications.',
     instructor: 'John Doe',
     duration: '6 weeks',
@@ -147,7 +147,7 @@ export const coursesData: Course[] = [
   },
   {
     id: '6',
-    title: 'UI/UX Design Fundamentals',
+    title: 'UI/UX Design',
     description: 'Learn the principles of user interface and user experience design.',
     instructor: 'Emily Carter',
     duration: '3 weeks',
