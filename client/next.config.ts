@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  optimizeFonts: false, // Disable font optimization temporarily
+  experimental: {
+    turbo: {
+      resolveAlias: {
+        '@vercel/turbopack-next/internal/font/google/font': '@next/font/google'
+      }
+    }
+  }
 };
 
 export default nextConfig;
