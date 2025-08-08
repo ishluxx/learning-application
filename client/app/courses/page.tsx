@@ -17,11 +17,11 @@ function getCourseStatus(course: Course): "Completed" | "In Progress" | "Not Sta
   if (!course.sections || course.sections.length === 0) {
     return "Not Started";
   }
-  const allItems = (course.sections ?? []).flatMap(section => section.items ?? []);
+  const allItems = (course.sections ?? []).flatMap((section) => section.items ?? []);
   if (allItems.length === 0) {
     return "Not Started";
   }
-  const completedItems = allItems.filter(item => item.completed).length;
+  const completedItems = allItems.filter((item) => item.completed).length;
   if (completedItems === allItems.length) {
     return "Completed";
   }
@@ -39,11 +39,11 @@ export default function CoursesPage() {
   const [statusFilter, setStatusFilter] = useState("");
 
   // Get all unique levels for filter dropdown
-  const levels = useMemo(() => Array.from(new Set(coursesData.map(c => c.level))), []);
+  const levels = useMemo(() => Array.from(new Set(coursesData.map((c) => c.level))), []);
 
   // Filter courses based on search, level, and status
   const filteredCourses = useMemo(() => {
-    return coursesData.filter(course => {
+    return coursesData.filter((course) => {
       const matchesSearch =
         course.title.toLowerCase().includes(search.toLowerCase()) ||
         (course.instructor && course.instructor.toLowerCase().includes(search.toLowerCase())) ||
@@ -54,7 +54,7 @@ export default function CoursesPage() {
       return matchesSearch && matchesLevel && matchesStatus;
     });
   }, [search, level, statusFilter]);
-  // Render sidebar, header, search/filter controls, and course cards
+
   return (
     <SidebarProvider
       style={{
@@ -67,8 +67,9 @@ export default function CoursesPage() {
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="p-6">
-            <h1 className="text-3xl font-bold mb-6 text-blue-900 dark:text-white">Available Courses</h1>
-            {/* Search and Filter Controls: user can search/filter courses */}
+            <h1 className="text-3xl font-extrabold dark:text-white">Available Courses</h1>
+            <br />
+            {/* Search and Filter Controls */}
             <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
               <div className="relative w-full md:w-1/2">
                 <input
@@ -86,8 +87,10 @@ export default function CoursesPage() {
                 className="rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-black dark:text-white dark:border-gray-800"
               >
                 <option value="">All Levels</option>
-                {levels.map(lvl => (
-                  <option key={lvl} value={lvl}>{lvl}</option>
+                {levels.map((lvl) => (
+                  <option key={lvl} value={lvl}>
+                    {lvl}
+                  </option>
                 ))}
               </select>
               <select
@@ -108,17 +111,24 @@ export default function CoursesPage() {
                   No courses found.
                 </div>
               ) : (
-                filteredCourses.map(course => {
-                  const status = getCourseStatus(course)
-                  let statusColor = ""
-                  if (status === "Completed") statusColor = "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                  else if (status === "In Progress") statusColor = "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
-                  else statusColor = "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
-                  let buttonText = "Start Learning"
+                filteredCourses.map((course) => {
+                  const status = getCourseStatus(course);
+                  let statusColor = "";
+                  if (status === "Completed")
+                    statusColor =
+                      "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+                  else if (status === "In Progress")
+                    statusColor =
+                      "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+                  else
+                    statusColor =
+                      "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+
+                  let buttonText = "Start Learning";
                   if (status === "Completed") {
-                    buttonText = "Review Course"
+                    buttonText = "Review Course";
                   } else if (status === "In Progress") {
-                    buttonText = "Continue Learning"
+                    buttonText = "Continue Learning";
                   }
 
                   return (
@@ -128,15 +138,48 @@ export default function CoursesPage() {
                           <CardTitle className="text-xl font-bold text-blue-900 dark:text-white group-hover:text-blue-700 transition">
                             {course.title}
                           </CardTitle>
-                          <span className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold shadow-sm ", statusColor)} aria-label={status}>
-                            {status === "Completed" ? (
-                              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" /></svg>
-                            ) : status === "In Progress" ? (
-                              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /></svg>
-                            ) : (
-                              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /></svg>
+                          <span
+                            className={cn(
+                              "inline-flex flex-wrap items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold shadow-sm",
+                              statusColor
                             )}
-                            {status}
+                            aria-label={status}
+                          >
+                            {status === "Completed" ? (
+                              <svg
+                                className="h-4 w-4 flex-shrink-0"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                              >
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                            ) : status === "In Progress" ? (
+                              <svg
+                                className="h-4 w-4 flex-shrink-0"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                              >
+                                <circle cx="12" cy="12" r="10" />
+                              </svg>
+                            ) : (
+                              <svg
+                                className="h-4 w-4 flex-shrink-0"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                              >
+                                <circle cx="12" cy="12" r="10" />
+                              </svg>
+                            )}
+                            <span className="whitespace-nowrap">{status}</span>
                           </span>
                         </div>
                         <CardDescription className="mt-1 text-gray-600 dark:text-gray-300 text-base">
@@ -146,7 +189,7 @@ export default function CoursesPage() {
                       <CardContent className="flex-1 flex flex-col">
                         <div className="relative aspect-video w-full mb-4 rounded-xl overflow-hidden border border-blue-100 dark:border-gray-800 shadow">
                           <img
-                            src={course.image || '/images/placeholder-course.png'}
+                            src={course.image || "/images/placeholder-course.png"}
                             alt={course.title}
                             className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                           />
@@ -160,10 +203,11 @@ export default function CoursesPage() {
                         </div>
                       </CardContent>
                       <CardFooter className="flex flex-col space-y-2">
-                        <Button asChild className="w-full font-bold px-6 py-3 rounded-lg shadow bg-black dark:bg-white dark:text-black hover:bg-gray-900 text-white text-base transition">
-                          <Link href={`/courses/${course.id}`}>
-                            {buttonText}
-                          </Link>
+                        <Button
+                          asChild
+                          className="w-full font-bold px-6 py-3 rounded-lg shadow bg-black dark:bg-white dark:text-black hover:bg-gray-900 text-white text-base transition"
+                        >
+                          <Link href={`/courses/${course.id}`}>{buttonText}</Link>
                         </Button>
                         <Button variant="outline" asChild className="w-full">
                           <Link href={`/courses/${course.id}/overview`} className="flex items-center">
@@ -173,7 +217,7 @@ export default function CoursesPage() {
                         </Button>
                       </CardFooter>
                     </Card>
-                  )
+                  );
                 })
               )}
             </div>
@@ -181,5 +225,5 @@ export default function CoursesPage() {
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
-};
+  );
+}
