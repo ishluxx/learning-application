@@ -1,7 +1,7 @@
 'use client'
 
 import { use } from 'react'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Circle, Clock, Users, Star, Play } from 'lucide-react'
 import { AppSidebar } from "@/components/student/app-sidebar"
 import { SiteHeader } from "@/components/student/site-header"
 import { Button } from "@/components/ui/button"
@@ -47,158 +47,216 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
 
         <main className="container mx-auto p-6 select-none">
           
-          {/* Back Button */}
-          <Button variant="ghost" asChild className="mb-8">
-            <Link href="/courses" className="flex items-center text-indigo-600 hover:text-indigo-700 font-semibold transition">
-              <ArrowLeft className="mr-2 h-5 w-5" />
-              Back to Courses
-            </Link>
-          </Button>
+          {/* Header Navigation */}
+          <div className="flex items-center justify-between mb-10">
+            <div className="flex items-center">
+              <Button 
+                variant="ghost" 
+                asChild 
+                className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-2 rounded-full font-medium shadow-lg"
+              >
+                <Link href="/courses" className="flex items-center">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Course Modules
+                </Link>
+              </Button>
+            </div>
+            <Button 
+              variant="outline" 
+              className="text-gray-600 hover:text-gray-900 border-gray-300 px-6 py-2 rounded-full font-medium"
+            >
+              📊 Analytics & Progress
+            </Button>
+          </div>
 
-          {/* Responsive grid: main + sidebar */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            
-            {/* Main Content */}
-            <section className="lg:col-span-2 space-y-8">
-              
-              {/* Course Header */}
-              <div className="space-y-3">
-                <h1 className="text-5xl font-extrabold  dark:text-white ">
-                  {course.title}
-                </h1>
-                <p className="text-lg text-muted-foreground max-w-3xl leading-relaxed">
-                  {course.description}
-                </p>
-
-                {/* Meta badges */}
-                <div className="flex flex-wrap items-center gap-4 pt-3">
-                  <Badge variant="secondary" className="bg-blue-600 text-white text-sm px-3 py-1 shadow-md">
-                    {course.level}
-                  </Badge>
-                  <span className="text-sm text-muted-foreground font-medium">{course.duration}</span>
-                  {course.instructor && (
-                    <span className="text-sm text-muted-foreground font-medium">
-                      Instructor: <span className="text-indigo-600 dark:text-indigo-400">{course.instructor}</span>
-                    </span>
-                  )}
+          {/* Course Hero Card */}
+          <Card className="mb-10 overflow-hidden border border-gray-100 shadow-xl bg-gradient-to-r from-blue-50 via-white to-indigo-50 dark:from-blue-950/20 dark:via-gray-900 dark:to-indigo-950/20">
+            <CardContent className="p-10">
+              <div className="flex items-start justify-between mb-8">
+                <div className="flex items-start space-x-8">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-3xl flex items-center justify-center text-white text-3xl font-bold shadow-2xl shadow-blue-500/30">
+                    1
+                  </div>
+                  <div className="flex-1 pt-1">
+                    <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
+                      {course.title}
+                    </h1>
+                    <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg leading-relaxed max-w-3xl">
+                      {course.description}
+                    </p>
+                    <div className="flex flex-wrap items-center gap-6 text-sm">
+                      <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-md">
+                        <Clock className="h-4 w-4 text-blue-500" />
+                        <span className="font-medium">{course.duration}</span>
+                      </div>
+                      <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-md">
+                        <Users className="h-4 w-4 text-green-500" />
+                        <span className="font-medium">{course.instructor}</span>
+                      </div>
+                      <Badge className="bg-gradient-to-r from-orange-400 to-orange-500 text-white px-4 py-2 text-sm font-medium shadow-md">
+                        {course.level}
+                      </Badge>
+                      <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-md">
+                        <Star className="h-4 w-4 text-yellow-500" />
+                        <span className="font-medium">88% popularity</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
+                  <div className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">{progress}%</div>
+                  <div className="text-sm text-gray-500 font-medium">{completedLessons} of {totalLessons} lessons</div>
+                  <div className="text-xs text-gray-400 mt-1">completed</div>
                 </div>
               </div>
-
-              {/* Progress Bar Card */}
-              {totalLessons > 0 && (
-                <Card className="shadow-lg border border-gray-200 dark:border-gray-700 rounded-xl">
-                  <CardHeader>
-                    <div className="flex justify-between items-center">
-                      <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">Your Progress</CardTitle>
-                      <span className="text-sm text-muted-foreground font-medium">
-                        {completedLessons} of {totalLessons} lessons completed
-                      </span>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="w-full bg-gray-300 dark:bg-gray-800 rounded-full h-3 overflow-hidden shadow-inner">
-                      <div 
-                        className="bg-blue-600 h-3 rounded-full transition-all duration-500 ease-in-out"
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
-                    <div className="mt-3 text-sm text-muted-foreground text-right font-semibold">
-                      {progress}% Complete
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Course Content List */}
-              <Card className="shadow-xl rounded-xl border border-gray-200 dark:border-gray-700">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-semibold">Course Content</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-6">
-                    {course.sections?.map((section) => (
-                      <div key={section.id} className="rounded-lg overflow-hidden border border-gray-100 dark:border-gray-800">
-                        
-                        {/* Section Header */}
-                        <div className="bg-gray-100 dark:bg-indigo-900 px-5 py-3 text-indigo-800 dark:text-indigo-200 font-semibold text-lg shadow-inner select-text">
-                          {section.title}
-                        </div>
-
-                        {/* Lesson List */}
-                        <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-                          {section.items.map((item) => (
-                            <li 
-                              key={item.id} 
-                              className="px-6 py-4 flex items-center justify-between hover:bg-indigo-50 dark:hover:bg-indigo-900 transition cursor-pointer select-text"
-                            >
-                              {/* Lesson title with subtle style for completed */}
-                              <span className={item.completed ? ' text-gray-500 dark:text-gray-400' : 'font-medium text-gray-900 dark:text-gray-200'}>
-                                {item.title}
-                              </span>
-                              
-                              {/* Completion Badge */}
-                              {item.completed ? (
-                                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-white px-3 py-1 shadow">
-                                  Completed
-                                </Badge>
-                              ) : (
-                                <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-white px-3 py-1 shadow">
-                                  Not Started
-                                </Badge>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* Sidebar Content */}
-            <aside className="space-y-8">
               
-              {/* Course Image + Start/Continue Button */}
-              <Card className="shadow-2xl rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
-                <CardContent className="p-0">
-                  <div className="relative aspect-video w-full">
-                    <Image
-                      src={getCourseImage(course.title)}
-                      alt={course.title}
-                      fill
-                      className="object-cover transition-transform duration-700 hover:scale-105"
-                      priority
-                    />
-                  </div>
-                  <div className="p-6">
-                    <Button asChild className="w-full text-lg font-semibold" size="lg" variant="default">
-                      <Link href={`/courses/${course.id}`}>
-                        {completedLessons > 0 ? 'Continue Learning' : 'Start Learning'}
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Enhanced Progress Bar */}
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-base font-semibold text-gray-800 dark:text-gray-200">Overall Progress</span>
+                  <span className="text-sm text-gray-500 font-medium">{progress}% Complete</span>
+                </div>
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 shadow-inner">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-1000 ease-out shadow-lg"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-              {/* "What you'll learn" Section */}
-              <Card className="shadow-xl rounded-xl border border-gray-200 dark:border-gray-700">
-                <CardHeader>
-                  <CardTitle className="text-xl font-semibold">What you&apos;ll learn</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <ul className="space-y-3">
-                    {course.sections?.flatMap(section => section.items).slice(0, 5).map((item, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <CheckIcon className="h-5 w-5 mt-0.5 text-green-500 flex-shrink-0" />
-                        <span className="text-gray-900 dark:text-gray-100 font-medium">{item.title}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-
-            </aside>
+          {/* Course Sections */}
+          <div className="space-y-5">
+            {course.sections?.map((section, sectionIndex) => (
+              <div key={section.id}>
+                {section.items.map((item, itemIndex) => {
+                  const overallIndex = course.sections!
+                    .slice(0, sectionIndex)
+                    .reduce((acc, s) => acc + s.items.length, 0) + itemIndex + 1;
+                  
+                  return (
+                    <Card 
+                      key={item.id} 
+                      className={`transition-all duration-300 hover:shadow-xl hover:scale-[1.01] border ${
+                        item.completed
+                          ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 shadow-lg shadow-green-100/50 dark:from-green-950/20 dark:to-emerald-950/20 dark:border-green-800'
+                          : 'bg-white border-gray-200 shadow-md hover:shadow-lg dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-gray-750'
+                      }`}
+                    >
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-6">
+                            {/* Enhanced Completion Icon */}
+                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 ${
+                              item.completed
+                                ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/30'
+                                : 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-blue-500/30'
+                            }`}>
+                              {item.completed ? (
+                                <CheckCircle2 className="h-6 w-6" />
+                              ) : (
+                                <span className="font-bold text-lg">{overallIndex}</span>
+                              )}
+                            </div>
+                            
+                            {/* Enhanced Content */}
+                            <div className="flex-1">
+                              <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-2 leading-tight">
+                                {item.title}
+                              </h3>
+                              <div className="flex flex-wrap items-center gap-3 text-sm">
+                                <div className="flex items-center space-x-1 bg-blue-100 dark:bg-blue-900/30 px-3 py-1 rounded-full">
+                                  <Clock className="h-3 w-3 text-blue-600" />
+                                  <span className="font-medium text-blue-700 dark:text-blue-300">25 min</span>
+                                </div>
+                                <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 font-medium">
+                                  video
+                                </Badge>
+                                <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 text-xs font-medium">
+                                  {course.level.toLowerCase()}
+                                </Badge>
+                                <div className="flex items-center space-x-3 text-gray-500">
+                                  <span className="flex items-center space-x-1">
+                                    <span>⭐</span>
+                                    <span className="font-medium">5.5k</span>
+                                  </span>
+                                  <span className="flex items-center space-x-1">
+                                    <span>👍</span>
+                                    <span className="font-medium">993</span>
+                                  </span>
+                                  <span className="flex items-center space-x-1">
+                                    <span>📊</span>
+                                    <span className="font-medium">4.8</span>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Enhanced Action Section */}
+                          <div className="flex items-center space-x-4">
+                            {item.completed && (
+                              <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 text-sm font-bold shadow-lg animate-pulse">
+                                ✨ COMPLETED
+                              </Badge>
+                            )}
+                            <Button 
+                              variant="ghost" 
+                              size="lg"
+                              className={`p-3 rounded-full transition-all duration-300 hover:scale-110 ${
+                                item.completed 
+                                  ? 'text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-950/30' 
+                                  : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/30'
+                              }`}
+                            >
+                              <Play className="h-5 w-5" />
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            ))}
+            
+            {/* Enhanced Final Assessment Card */}
+            <Card className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20 dark:border-purple-800">
+              <CardContent className="p-8">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-6">
+                    <div className="w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-purple-500/30">
+                      {totalLessons + 1}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-2 leading-tight">
+                        Comprehensive Knowledge Assessment
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-3 text-sm">
+                        <div className="flex items-center space-x-1 bg-purple-100 dark:bg-purple-900/30 px-3 py-1 rounded-full">
+                          <Clock className="h-3 w-3 text-purple-600" />
+                          <span className="font-medium text-purple-700 dark:text-purple-300">45 min</span>
+                        </div>
+                        <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium">
+                          Final Quiz
+                        </Badge>
+                        <Badge variant="outline" className="bg-pink-50 text-pink-700 border-pink-200 text-xs font-medium">
+                          assessment
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="lg"
+                    className="text-purple-600 hover:text-purple-700 hover:bg-purple-50 dark:hover:bg-purple-950/30 p-3 rounded-full transition-all duration-300 hover:scale-110"
+                  >
+                    <Play className="h-5 w-5" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </main>
       </SidebarInset>
@@ -206,7 +264,6 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
   )
 }
 
-// Returns a course image path based on keywords in the title
 function getCourseImage(title: string): string {
   if (title.toLowerCase().includes('typescript')) {
     return '/images/learn.typescript.png';
@@ -215,21 +272,3 @@ function getCourseImage(title: string): string {
   }
   return '/images/placeholder-course.png';
 }
-
-// Inline Check Icon (SVG)
-const CheckIcon = ({ className = '' }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="3"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <polyline points="20 6 9 17 4 12" />
-  </svg>
-)
