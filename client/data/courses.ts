@@ -183,7 +183,7 @@ export const coursesData: Course[] = [
     level: 'Intermediate',
     image: '/images/placeholder-course.png',
     sections: [
-      {
+        {
         id: 'data-intro',
         title: 'Getting Started with Data',
         isOpen: true,
