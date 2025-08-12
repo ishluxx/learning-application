@@ -32,6 +32,7 @@ export function NavMain({
             >
               <IconCirclePlusFilled />
               <span>Quick Create</span>
+        
             </SidebarMenuButton>
 
           </SidebarMenuItem>
