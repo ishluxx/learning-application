@@ -21,10 +21,12 @@ export interface Course {
   duration: string;
   level: string;
   image?: string; // Image for course card and lesson page
+  video?: string; // video for course card and lesson page in learning platform
   sections?: CourseSection[]; // Made sections optional for courses that don't have detailed progress
 }
 
 export const coursesData: Course[] = [
+
   {
     id: '1',
     title: 'Introduction to React',
@@ -33,6 +35,7 @@ export const coursesData: Course[] = [
     duration: '4 weeks',
     level: 'Beginner',
     image: '/images/How-to-Learn-ReactJS-in-2021.png',
+    // video: '',
     sections: [
       {
         id: "getting-started",
@@ -55,6 +58,8 @@ export const coursesData: Course[] = [
       },
     ]
   },
+
+  // Lesson 2: Advanced TypeScript
   {
     id: '2',
     title: 'Advanced TypeScript',
@@ -63,6 +68,7 @@ export const coursesData: Course[] = [
     duration: '6 weeks',
     level: 'Advanced',
     image: '/images/learn_typescipt.jpeg',
+    // video: '',
     sections: [
       {
         id: "types",
@@ -84,6 +90,8 @@ export const coursesData: Course[] = [
     duration: '6 weeks',
     level: 'Advanced',
     image: '/images/placeholder-course.png',
+    // video: '',
+    
     sections: [
       {
         id: "types",
@@ -114,6 +122,33 @@ export const coursesData: Course[] = [
           { id: "type-guards", title: "Type Guards & Type Predicates", completed: false, content: "Learn how to use type guards and type predicates in Blockchain applications to ensure data integrity and security.\n\nRelated topics: Validation, consensus algorithms.\nPractical tip: Always validate external data before processing in smart contracts." },
         ],
       },
+      {
+        id: "types",
+        title: "Type System",
+        isOpen: true,
+        items: [
+          { id: "advanced-types", title: "Advanced Types", completed: false, isActive: true, content: "Explore advanced Blockchain data types and how they are used in smart contracts and distributed ledgers.\n\nRelated topics: Hashing, cryptography, smart contracts.\nPractical tip: Use strong types for security-critical blockchain logic." },
+          { id: "type-guards", title: "Type Guards & Type Predicates", completed: false, content: "Learn how to use type guards and type predicates in Blockchain applications to ensure data integrity and security.\n\nRelated topics: Validation, consensus algorithms.\nPractical tip: Always validate external data before processing in smart contracts." },
+        ],
+      },
+      {
+        id: "types",
+        title: "Type System",
+        isOpen: true,
+        items: [
+          { id: "advanced-types", title: "Advanced Types", completed: false, isActive: true, content: "Explore advanced Blockchain data types and how they are used in smart contracts and distributed ledgers.\n\nRelated topics: Hashing, cryptography, smart contracts.\nPractical tip: Use strong types for security-critical blockchain logic." },
+          { id: "type-guards", title: "Type Guards & Type Predicates", completed: false, content: "Learn how to use type guards and type predicates in Blockchain applications to ensure data integrity and security.\n\nRelated topics: Validation, consensus algorithms.\nPractical tip: Always validate external data before processing in smart contracts." },
+        ],
+      },
+      {
+        id: "types",
+        title: "Type System",
+        isOpen: true,
+        items: [
+          { id: "advanced-types", title: "Advanced Types", completed: false, isActive: true, content: "Explore advanced Blockchain data types and how they are used in smart contracts and distributed ledgers.\n\nRelated topics: Hashing, cryptography, smart contracts.\nPractical tip: Use strong types for security-critical blockchain logic." },
+          { id: "type-guards", title: "Type Guards & Type Predicates", completed: false, content: "Learn how to use type guards and type predicates in Blockchain applications to ensure data integrity and security.\n\nRelated topics: Validation, consensus algorithms.\nPractical tip: Always validate external data before processing in smart contracts." },
+        ],
+      },
     ]
   },
   {
@@ -124,6 +159,7 @@ export const coursesData: Course[] = [
     duration: '5 weeks',
     level: 'Beginner',
     image: '/images/placeholder-course.png',
+    // video: '',
     sections: [
       {
         id: 'intro',
@@ -153,6 +189,7 @@ export const coursesData: Course[] = [
     duration: '3 weeks',
     level: 'Intermediate',
     image: '/images/placeholder-course.png',
+    // video: '',
     sections: [
       {
         id: 'ui-basics',
@@ -182,6 +219,7 @@ export const coursesData: Course[] = [
     duration: '7 weeks',
     level: 'Intermediate',
     image: '/images/placeholder-course.png',
+    // video: '',
     sections: [
         {
         id: 'data-intro',
