@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/student/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import Dan from "../../../public/images/dan4.png"
 import {Icons} from "@/components/Icons/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
@@ -82,6 +83,32 @@ const data = [
 
 const Page = () => {
   const params = useParams()
+  const faqData = [
+    {
+      question: "How do I create an account?",
+      answer: "To create an account, click on the 'Sign Up' button on the top right corner of the homepage. Fill in your email, choose a password, and complete the registration process. You'll receive a confirmation email to verify your account."
+    },
+    {
+      question: "How can I reset my password?",
+      answer: "If you've forgotten your password, click on the 'Forgot Password' link on the login page. Enter your registered email address, and you'll receive instructions to reset your password."
+    },
+    {
+      question: "What type of content can I post?",
+      answer: "You can post blog articles, personal experiences, and insights related to technology, programming, and web development. Make sure to follow our community guidelines and avoid inappropriate or offensive content."
+    },
+    {
+      question: "How do I edit or delete my posts?",
+      answer: "After logging in, navigate to your profile or dashboard. Find the post you want to modify, and click on the edit or delete icon next to the post. Confirm your action, and the changes will be applied."
+    },
+    {
+      question: "Is my personal information secure?",
+      answer: "We take data privacy seriously. All personal information is encrypted, and we follow strict security protocols. Check our Privacy Policy for more detailed information about how we protect your data."
+    }
+  ];
+   const [activeSection, setActiveSection] = useState(null);
+    const toggleSection = (index) => {
+    setActiveSection(activeSection === index ? null : index);
+  };
   const [isAudioEnabled, setIsAudioEnabled] = useState(false)
   const [isVideoEnabled, setIsVideoEnabled] = useState(false)
   const roomId = (params?.roomId as string) ?? 'default-room'
@@ -190,47 +217,46 @@ const Page = () => {
         <AppSidebar />
         <SidebarInset>
           <SiteHeader />
-          { isAudioEnabled &&
-            <div className="p-6 w-full h-[100vh] fixed bottom-0 left-0 z-50 flex justify-center flex-col items-center bg-white dark:bg-[#141414]" style={{backdropFilter: 'blur(10px)' }}>
-              <h1 className="text-[#141414] dark:text-gray-50 text-2xl mb-2">Wait for other to join</h1>
-              <span className="bg-red-500 p-1 w-[50px] h-[50px] rounded-[50%] flex justify-center items-center">
-              <IconPhoneCalling onClick={()=>{
-                setIsAudioEnabled(false)
-              }}/>
-              </span>
-            </div>
-          }
-          { isVideoEnabled &&
+         {/* Audio/Video Overlays */}
+          {isAudioEnabled && (
             <div className="p-6 w-full h-[100vh] fixed bottom-0 left-0 z-50 flex justify-center flex-col items-center bg-white dark:bg-[#141414]" style={{ backdropFilter: 'blur(10px)' }}>
-               <h1 className="text-[#141414] dark:text-gray-50 text-2xl mb-2">Wait for other to join</h1>
+              <h1 className="text-[#141414] dark:text-gray-50 text-2xl mb-2">Wait for others to join</h1>
               <span className="bg-red-500 p-1 w-[50px] h-[50px] rounded-[50%] flex justify-center items-center">
-              <IconPhoneCalling onClick={()=>{
-                setIsVideoEnabled(false)
-              }}/>
+                <IconPhoneCalling onClick={() => setIsAudioEnabled(false)} />
               </span>
             </div>
-          }
+          )}
+          {isVideoEnabled && (
+            <div className="p-6 w-full h-[100vh] fixed bottom-0 left-0 z-50 flex justify-center flex-col items-center bg-white dark:bg-[#141414]" style={{ backdropFilter: 'blur(10px)' }}>
+              <h1 className="text-[#141414] dark:text-gray-50 text-2xl mb-2">Wait for others to join</h1>
+              <span className="bg-red-500 p-1 w-[50px] h-[50px] rounded-[50%] flex justify-center items-center">
+                <IconPhoneCalling onClick={() => setIsVideoEnabled(false)} />
+              </span>
+            </div>
+          )}
 
-          <div className="bg-gray-100 dark:bg-[#141414] p-6">
-            <div className="max-w-7xl mx-auto">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                  <h1 className="text-3xl font-bold">{roomDetails.title}</h1>
-                  <p className="mt-2">{roomDetails.description}</p>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-2">
-                    <Icons.users className="h-5 w-5" />
-                    <span>{roomDetails.members.toLocaleString()} members</span>
-                  </div>
-                <div className="flex gap-2">
-                  <IconVideo onClick={()=>{
-                    setIsVideoEnabled(true)
-                  }}/>
-                  <IconPhoneCall onClick={()=>{
-                    setIsAudioEnabled(true)
-                  }}/>
-                   <div className="flex items-center gap-2 text-sm">
+            <div className="relative z-10 px-8 py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8 bg-gray-50 dark:bg-[#141414] mb-8">
+            <div className="flex-1">
+              <h1 className="text-4xl font-extrabold text-[#141414] dark:text-gray-50 mb-2 tracking-tight">{roomDetails.title}</h1>
+              <p className="text-lg text-[#141414] dark:text-blue-200 max-w-2xl mb-4">{roomDetails.description}</p>
+              <div className="flex items-center gap-4 mb-4">
+                <span className="flex items-center gap-2 text-[#141414] dark:text-gray-50 font-bold">
+                  <Icons.users className="h-5 w-5" />
+                  {roomDetails.members.toLocaleString()} members
+                </span>
+                <span className="flex items-center gap-2 text-[#141414] dark:text-gray-50 font-bold">
+                  <span className="h-3 w-3 rounded-full bg-green-500 inline-block"></span>
+                  {roomDetails.activeNow} active now
+                </span>
+              </div>
+              <div className="flex gap-4 mt-2">
+                <Button variant="gradient" className="font-bold px-6 py-2 text-md shadow-lg flex items-center gap-2" onClick={()=>setIsVideoEnabled(true)}>
+                  <IconVideo className="h-5 w-5" /> Video Call
+                </Button>
+                <Button variant="gradient" className="font-bold px-6 py-2 text-md shadow-lg flex items-center gap-2" onClick={()=>setIsAudioEnabled(true)}>
+                  <IconPhoneCall className="h-5 w-5" /> Audio Call
+                </Button>
+                                 <div className="flex items-center gap-2 text-sm">
       
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
@@ -267,34 +293,27 @@ const Page = () => {
           </Sidebar>
         </PopoverContent>
       </Popover>
-    </div>
-
-                  </div>
-                </div>
+      </div>
               </div>
             </div>
-            {/* <div className="bg-white dark:bg-[#141414] rounded-lg shadow p-6">
-                <div className="flex items-start gap-4">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage src={roomDetails.instructor.avatar} />
-                    <AvatarFallback>{roomDetails.instructor.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-xl font-semibold">{roomDetails.instructor.name}</h3>
-                      <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">
-                        Instructor
-                      </span>
-                    </div>
-                    <p className="text-gray-600 dark:text-gray-300 mt-1">{roomDetails.instructor.bio}</p>
-                    <Button variant="outline" size="sm" className="mt-3">
-                      <Icons.messageSquare className="mr-2 h-4 w-4" />
-                      Send message
-                    </Button>
-                  </div>
-                </div>
-              </div> */}
-          </div> 
+            <div className="flex-1 flex justify-center items-center">
+              {/* <Avatar className="h-32 w-32 shadow-xl ring-4 ring-[#141414] dark:ring-gray-50"> */}
+                {/* <AvatarImage src={roomDetails.instructor.avatar} />
+                 */}
+                 <img src="/images/dan4.png" className="h-32 w-32 shadow-xl rounded-[50%] ring-4 ring-[#141414] dark:ring-gray-50"/>
+                {/* <AvatarFallback>{roomDetails.instructor.name.charAt(0)}</AvatarFallback> */}
+              {/* </Avatar> */}
+              <div className="ml-6">
+                <h3 className="text-2xl font-bold text-[#141414] dark:text-gray-50text-blue-800 dark:text-white mb-1">{roomDetails.instructor.name}</h3>
+                <span className="text-xs border-1 border-[#141414] dark:border-gray-50 bg-gray-50 dark:bg-[#141414] text-[#141414] dark:text-gray-50 px-2 py-1 rounded-full font-semibold">Instructor</span>
+                <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm max-w-xs">{roomDetails.instructor.bio}</p>
+                <Button variant="outline" size="sm" className="mt-3">
+                  <Icons.messageSquare className="mr-2 h-4 w-4" />
+                  Message Instructor
+                </Button>
+              </div>
+            </div>
+          </div>
 
           <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Left Column */}
@@ -306,7 +325,7 @@ const Page = () => {
               <div className="bg-gray-50 dark:bg-[#141414] rounded-xl shadow-md overflow-hidden">
           {/* Tab Navigation */}
           <div>
-            <nav className="flex lg:ml-[250px]">
+            <nav className="flex lg:ml-[170px] overflow-auto">
               <button
                 className={`px-6 py-4 text-md font-bold ${activeTab === 'chats' ? 'border-b-2 border-[#141414] dark:border-gray-50 text-gray-500' : 'text-[#141414] dark:text-gray-50 hover:text-gray-700'}`}
                 onClick={() => setActiveTab('chats')}
@@ -324,6 +343,12 @@ const Page = () => {
                 onClick={() => setActiveTab('resources')}
               >
                 Resources
+              </button>
+              <button
+                className={`px-6 py-4 text-md font-bold ${activeTab === 'questions' ? 'border-b-2 border-[#141414] dark:border-gray-50 text-gray-500' : 'text-[#141414] dark:text-gray-50 hover:text-gray-700'}`}
+                onClick={() => setActiveTab('questions')}
+              >
+                Questions
               </button>
             </nav>
           </div>
@@ -625,6 +650,45 @@ const Page = () => {
               </div>
               </div>
                 }
+                 {/* Questions Tab */}
+              {activeTab === 'questions' && (
+                <div className="bg-gray-50 dark:bg-[#141414] rounded-2xl shadow-lg p-6">
+                  <h2 className="text-2xl font-bold mb-4 text-blue-800 dark:text-white">Ask a Question</h2>
+                  <Input
+                    value={newPost}
+                    onChange={(e) => setNewPost(e.target.value)}
+                    placeholder="Type your question..."
+                    className="bg-gray-100 dark:bg-gray-700 border-none mb-4"
+                  />
+                  <Button size="sm" onClick={handlePost} className="bg-blue-600 text-white font-bold mb-10">Ask</Button>
+                  {/* Example questions, replace with dynamic data as needed */}
+                 <section className="mb-12 p-6 ">
+          <h2 className="text-2xl font-semibold mb-4 text-center text-[#141414] dark:text-gray-50">Frequently Asked Questions</h2>
+          {faqData.map((faq, index) => (
+            <div 
+              key={index} 
+              className="bg-gray-50 dark:bg-[#141414] text-[#141414] dark:text-gray-50 rounded-lg mb-4 shadow-md"
+            >
+              <div 
+                onClick={() => toggleSection(index)}
+                className="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-200 hover:dark:bg-[#333] transition duration-300"
+              >
+                <h3 className="text-md font-semibold ">{faq.question}</h3>
+                <span className="text-lg ">
+                  {activeSection === index ? '−' : '+'}
+                </span>
+              </div>
+              {activeSection === index && (
+                <div className="p-4 pt-2  text-sm leading-relaxed">
+                  {faq.answer}
+                </div>
+              )}
+            </div>
+          ))}
+        </section>
+                </div>
+              )}
+
             </div>
 
 
@@ -732,3 +796,5 @@ const Page = () => {
 }
 
 export default Page
+
+
