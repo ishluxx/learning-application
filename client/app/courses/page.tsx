@@ -10,6 +10,7 @@ import { coursesData, Course } from "@/data/courses"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { Eye, Search, BookOpen, Clock, Users, Star, Filter, X, ChevronDown } from "lucide-react"
+import AIChatIcon from "@/components/ai/page";
 
 // Helper function to determine course status
 function getCourseStatus(course: Course): "Completed" | "In Progress" | "Not Started" {
@@ -79,6 +80,7 @@ export default function CoursesPage() {
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
+           <AIChatIcon />
           {/* Hero Section */}
           <div className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-950 dark:to-indigo-950 border-b border-gray-200 dark:border-gray-800">
             <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>

@@ -23,12 +23,14 @@ import {
   Mail,
   ArrowRight
 } from "lucide-react";
+import AIChatIcon from "@/components/ai/page";
 
 function LandingPage() {
   return (
 
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6">
       <LandingHeader />
+       <AIChatIcon />
       
       {/* Hero Section */}
       <section id="home" className="dark:bg-black dark:text-gray-200 mt-20">
