@@ -48,6 +48,11 @@ const data = {
       url: "/student",
       icon: IconDashboard,
     },
+      {
+      title: "Notification",
+      url: "/notifications",
+      icon: IconBell,
+    },
     {
       title: "Courses",
       url: "/courses",
@@ -62,12 +67,7 @@ const data = {
       title: "Achievements",
       url: "/achievements",
       icon: Medal,
-    },
-    {
-      title: "Notification",
-      url: "/notifications",
-      icon: IconBell,
-    },
+    }
   ],
   navClouds: [
     {

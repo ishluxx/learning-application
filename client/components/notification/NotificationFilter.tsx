@@ -22,8 +22,8 @@ export default function NotificationFilter({
           }}
           className={`px-3 py-1 rounded-full text-sm capitalize ${
             activeFilter === filter
-              ? "bg-purple-600 text-white"
-              : "glass-card text-gray-300 hover:bg-white/10"
+              ? "bg-blue-600 text-white"
+              : "glass-card text-gray-900 dark:text-gray-100"
           }`}
         >
           {filter}
