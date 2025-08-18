@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button"
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Trophy, Star, Gift, Crown, Medal, Target, Award } from "lucide-react"
 import { useState } from "react"
+import { Progress } from "@radix-ui/react-progress"
+import AIChatIcon from "@/components/ai/page"
 
 interface Reward {
   id: number
@@ -89,6 +91,7 @@ export default function RewardsPage() {
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
+           <AIChatIcon />
           <div className="@container/main flex flex-1 flex-col gap-4 p-6">
             {/* Header with stats */}
             <div className="flex items-center justify-between">

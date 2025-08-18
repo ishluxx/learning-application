@@ -47,6 +47,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import AIChatIcon from "@/components/ai/page"
 
 const data = [
   [
@@ -217,6 +218,7 @@ const Page = () => {
         <AppSidebar />
         <SidebarInset>
           <SiteHeader />
+           <AIChatIcon />
          {/* Audio/Video Overlays */}
           {isAudioEnabled && (
             <div className="p-6 w-full h-[100vh] fixed bottom-0 left-0 z-50 flex justify-center flex-col items-center bg-white dark:bg-[#141414]" style={{ backdropFilter: 'blur(10px)' }}>

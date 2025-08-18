@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
+import AIChatIcon from "@/components/ai/page"
 
 // Course data structure - matches your existing types
 export interface CourseItem {
@@ -184,6 +185,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
 
         <div className="flex h-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
           {/* Main Content Area */}
+           <AIChatIcon />
           <div className="flex-1 flex flex-col">
             {/* Enhanced Header Bar */}
             <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 shadow-sm">

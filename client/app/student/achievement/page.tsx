@@ -11,6 +11,7 @@ import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Star, Award, Trophy, Medal, Target, Crown, Book, Zap, Users, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
+import AIChatIcon from "@/components/ai/page"
 
 interface Achievement {
   id: number
@@ -117,6 +118,7 @@ export default function AchievementPage() {
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
+           <AIChatIcon />
           <div className="@container/main flex flex-1 flex-col gap-4 p-6">
             {/* Header Section */}
             <div className="flex items-center justify-between">
