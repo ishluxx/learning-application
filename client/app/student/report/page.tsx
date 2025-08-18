@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
+// import { Progress } from "@/components/ui/progress"
 import { 
   Download, 
   FileText, 
@@ -138,7 +138,7 @@ export default function ReportPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">3.92</div>
-                  <Progress value={progress} className="mt-2" />
+                  {/* <Progress value={progress} className="mt-2" /> */}
                   <p className="text-xs text-muted-foreground mt-2">
                     Top 5% of class
                   </p>

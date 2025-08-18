@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/student/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
+// import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Star, Award, Trophy, Medal, Target, Crown, Book, Zap, Users, Check } from "lucide-react"
@@ -178,17 +178,7 @@ export default function AchievementPage() {
                                 <span className="text-muted-foreground">Progress</span>
                                 <span>{achievement.progress}%</span>
                               </div>
-                              <Progress 
-                                value={achievement.progress} 
-                                className={cn(
-                                  "h-2",
-                                  achievement.progress === 100 ? "bg-green-100" : ""
-                                )}
-                              >
-                                {achievement.progress === 100 && (
-                                  <div className="h-full bg-green-500" style={{ width: '100%' }} />
-                                )}
-                              </Progress>
+                         
                               {achievement.progress === 100 && (
                                 <div className="flex items-center justify-center gap-2 mt-4 text-green-500">
                                   <Check className="h-4 w-4" />
