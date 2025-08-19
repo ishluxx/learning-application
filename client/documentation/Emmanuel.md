@@ -17,3 +17,4 @@
 - Created a new layout component for the account section to improve organization and readability.
 
 -fix: remove unnecessary gap in DialogContent styling
+-fix account pages ui 
