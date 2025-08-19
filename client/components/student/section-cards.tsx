@@ -42,7 +42,7 @@ export function SectionCards() {
             1,234
           </CardTitle>
           <CardAction>
-            <Badge variant="outline" className="inline-flex items-center n6i5x sikx1 w4xo0 ad7q2 dark:text-red-400">
+            <Badge variant="outline" className="inline-flex items-center n6i5x sikx1 w4xo0 ad7q2 dark:text-red-400  text-red-400">
               <IconTrendingDown />
               -20%
             </Badge>

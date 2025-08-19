@@ -4,3 +4,4 @@
 -fix auth pathways (login and signup ui)
 -make same changes on the student 
 -update color variables and enhance badge styles in section cards
+-add Ai Assistant page and update sidebar navigation

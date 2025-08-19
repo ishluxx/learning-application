@@ -67,6 +67,11 @@ const data = {
       title: "Achievements",
       url: "/achievements",
       icon: Medal,
+    },
+    {
+      title: "Ai Assistant",
+      url: "/ai-assistant",
+      icon: IconFileWord,
     }
   ],
   navClouds: [
@@ -144,12 +149,7 @@ const data = {
       name: "Reports",
       url: "#",
       icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
+    }
   ],
 }
 
