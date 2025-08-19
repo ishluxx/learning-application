@@ -1,9 +1,8 @@
-import React from 'react'
+import { Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <div>
-        <footer className="mt-auto aqyoh dark:bg-neutral-900">
+<footer className="mt-auto aqyoh dark:bg-neutral-900">
   <div className="w-full er0d1 mx-auto beg37 s64f7 fglch xf1r4 ids43">
     {/* Grid */}
     <div className="ylm8n dzapa z0knj n60o7 e3s31 ust79">
@@ -214,22 +213,6 @@ export default function Footer() {
               className="z4zqw sqycf jy5gh mg8vb focus:outline-hidden pwmu5 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
               href="#"
             >
-              Order Status
-            </a>
-          </li>
-          <li>
-            <a
-              className="z4zqw sqycf jy5gh mg8vb focus:outline-hidden pwmu5 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-              href="#"
-            >
-              Returns &amp; Exchanges
-            </a>
-          </li>
-          <li>
-            <a
-              className="z4zqw sqycf jy5gh mg8vb focus:outline-hidden pwmu5 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-              href="#"
-            >
               Contact Us
             </a>
           </li>
@@ -412,10 +395,10 @@ export default function Footer() {
         </li>
       </ul>
       {/* End List */}
-      <p className="xs2f2 jy5gh dark:text-neutral-500">© 2025 E-learning Labs.</p>
+      <p className="xs2f2 jy5gh dark:text-neutral-500">© 2025 E-Lab.</p>
     </div>
   </div>
 </footer>
-    </div>
-  )
+  );
 }
+       

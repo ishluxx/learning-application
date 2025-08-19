@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Pencil, Phone, Mail, X, Check } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
+import AIChatIcon from "@/components/ai/page"
 
 function getInitials(name: string): string {
   return name
@@ -84,6 +85,7 @@ export default function ProfilePage() {
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-4 p-6">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+               <AIChatIcon />
               {/* Profile Overview */}
               <Card className="lg:col-span-4">
                 <CardHeader>

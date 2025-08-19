@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
+// import { Progress } from "@/components/ui/progress"
 import { 
   Download, 
   FileText, 
@@ -22,8 +22,10 @@ import {
   Star
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { format } from "date-fns"
+// import { format } from "date-fns"
 import { useState, useEffect } from "react"
+import AIChatIcon from "@/components/ai/page"
+import { Progress } from "@radix-ui/react-progress"
 
 function getInitials(name: string): string {
   return name
@@ -128,6 +130,7 @@ export default function ReportPage() {
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
+           <AIChatIcon />
           <div className="@container/main flex flex-1 flex-col gap-4 p-6">
             {/* Overview Cards */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -138,7 +141,7 @@ export default function ReportPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">3.92</div>
-                  <Progress value={progress} className="mt-2" />
+                  {/* <Progress value={progress} className="mt-2" /> */}
                   <p className="text-xs text-muted-foreground mt-2">
                     Top 5% of class
                   </p>

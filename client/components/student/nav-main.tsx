@@ -18,7 +18,7 @@ export function NavMain({
   items: {
     title: string
     url: string
-    icon?: Icon
+    icon?:  React.ComponentType<any>
   }[]
 }) {
   return (
@@ -32,6 +32,7 @@ export function NavMain({
             >
               <IconCirclePlusFilled />
               <span>Quick Create</span>
+        
             </SidebarMenuButton>
 
           </SidebarMenuItem>
