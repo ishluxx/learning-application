@@ -15,3 +15,5 @@
 - Deleted the data table component as it was no longer needed.
 - Changed the navigation user dropdown to link to billing instead of notifications.
 - Created a new layout component for the account section to improve organization and readability.
+
+-fix: remove unnecessary gap in DialogContent styling
