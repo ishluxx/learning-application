@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import {
+  IconBell,
   IconCamera,
   IconChartBar,
   IconDashboard,
@@ -33,7 +34,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
-import { Settings } from "lucide-react"
+import { Medal, Settings } from "lucide-react"
 
 const data = {
   user: {
@@ -47,6 +48,11 @@ const data = {
       url: "/student",
       icon: IconDashboard,
     },
+      {
+      title: "Notification",
+      url: "/notifications",
+      icon: IconBell,
+    },
     {
       title: "Courses",
       url: "/courses",
@@ -58,15 +64,10 @@ const data = {
       icon: IconUsers,
     },
     {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
+      title: "Achievements",
+      url: "/achievements",
+      icon: Medal,
+    }
   ],
   navClouds: [
     {

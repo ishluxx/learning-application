@@ -22,6 +22,7 @@ import {
   BrainCircuit
 } from "lucide-react"
 import { useState, useEffect } from "react"
+import AIChatIcon from "@/components/ai/page"
 
 export default function ProgressPage() {
   const [selectedSubject, setSelectedSubject] = useState("all")
@@ -141,6 +142,7 @@ export default function ProgressPage() {
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
+           <AIChatIcon />
           <div className="@container/main flex flex-1 flex-col gap-4 p-6">
             {/* Overview Stats */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
