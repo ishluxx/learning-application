@@ -5,3 +5,5 @@
 -make same changes on the student 
 -update color variables and enhance badge styles in section cards
 -add Ai Assistant page and update sidebar navigation
+-fix: update icon type to allow any React component in NavMain
+-feat: enhance Ai Assistant page layout and update NavMain icon type to support any React component
