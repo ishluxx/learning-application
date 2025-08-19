@@ -4,6 +4,7 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { SiteHeader } from "@/components/student/site-header"
 
 
 export default function Page() {
@@ -18,6 +19,7 @@ export default function Page() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
+        <SiteHeader/>
         <section>
             <main id="content">
             <div className="p3amf y95gc w-full ehc3u fglch xf1r4 ids43 mx-auto">
@@ -55,9 +57,9 @@ export default function Page() {
                 {/* Grid */}
                 <div className="ylm8n hjdn7 fafsg dy3ai g27d7 gbedp">
                   {/* Account Page Preview Card */}
-                  <a
+                  <Link
                     className="tbd2k dgycp relative aqyoh flex flex-col er6t7 focus:outline-hidden before:absolute before:inset-0 before:z-10 before:border before:border-gray-200 before:rounded-xl before:transition hover:before:border-2 hover:before:border-indigo-600 hover:before:shadow-lg focus:before:border-2 focus:before:border-indigo-600 focus:before:shadow-lg dark:bg-neutral-900 dark:before:border-neutral-700 dark:hover:before:border-indigo-500 dark:focus:before:border-indigo-500"
-                    href="../../pro/shop/personal-info.html"
+                    href="/student/account/sc/profile"
                   >
                     <svg
                       className="e731n qqwrg c9jt8 dark:text-neutral-200"
@@ -80,12 +82,12 @@ export default function Page() {
                     <p className="rwavo w4xo0 jy5gh dark:text-neutral-500">
                       Update your details, email preferences or password
                     </p>
-                  </a>
+                  </Link>
                   {/* End Account Page Preview Card */}
                   {/* Account Page Preview Card */}
-                  <a
+                  <Link
                     className="tbd2k dgycp relative aqyoh flex flex-col er6t7 focus:outline-hidden before:absolute before:inset-0 before:z-10 before:border before:border-gray-200 before:rounded-xl before:transition hover:before:border-2 hover:before:border-indigo-600 hover:before:shadow-lg focus:before:border-2 focus:before:border-indigo-600 focus:before:shadow-lg dark:bg-neutral-900 dark:before:border-neutral-700 dark:hover:before:border-indigo-500 dark:focus:before:border-indigo-500"
-                    href="../../pro/shop/my-orders.html"
+                    href="/student/account/sc/report"
                   >
                     <svg
                       className="e731n qqwrg c9jt8 dark:text-neutral-200"
@@ -103,16 +105,16 @@ export default function Page() {
                       <path d="M3 6h18" />
                       <path d="M16 10a4 4 0 0 1-8 0" />
                     </svg>
-                    <h4 className="jl6n6 sikx1 c9jt8 dark:text-neutral-200">My Orders</h4>
+                    <h4 className="jl6n6 sikx1 c9jt8 dark:text-neutral-200">My Report's</h4>
                     <p className="rwavo w4xo0 jy5gh dark:text-neutral-500">
-                      Check the status of your orders or see past orders
+                      Check the status of your learnig or see past reports
                     </p>
-                  </a>
+                  </Link>
                   {/* End Account Page Preview Card */}
                   {/* Account Page Preview Card */}
                   <a
                     className="tbd2k dgycp relative aqyoh flex flex-col er6t7 focus:outline-hidden before:absolute before:inset-0 before:z-10 before:border before:border-gray-200 before:rounded-xl before:transition hover:before:border-2 hover:before:border-indigo-600 hover:before:shadow-lg focus:before:border-2 focus:before:border-indigo-600 focus:before:shadow-lg dark:bg-neutral-900 dark:before:border-neutral-700 dark:hover:before:border-indigo-500 dark:focus:before:border-indigo-500"
-                    href="../../pro/shop/addresses.html"
+                    href="/student/account/sc/achivements"
                   >
                     <svg
                       className="e731n qqwrg c9jt8 dark:text-neutral-200"
@@ -131,7 +133,7 @@ export default function Page() {
                       <path d="M18 22v-3" />
                       <circle cx={10} cy={10} r={3} />
                     </svg>
-                    <h4 className="jl6n6 sikx1 c9jt8 dark:text-neutral-200">Addresses</h4>
+                    <h4 className="jl6n6 sikx1 c9jt8 dark:text-neutral-200">Achivement</h4>
                     <p className="rwavo w4xo0 jy5gh dark:text-neutral-500">
                       Manage your billing &amp; shipping addresses
                     </p>
@@ -140,7 +142,7 @@ export default function Page() {
                   {/* Account Page Preview Card */}
                   <a
                     className="tbd2k dgycp relative aqyoh flex flex-col er6t7 focus:outline-hidden before:absolute before:inset-0 before:z-10 before:border before:border-gray-200 before:rounded-xl before:transition hover:before:border-2 hover:before:border-indigo-600 hover:before:shadow-lg focus:before:border-2 focus:before:border-indigo-600 focus:before:shadow-lg dark:bg-neutral-900 dark:before:border-neutral-700 dark:hover:before:border-indigo-500 dark:focus:before:border-indigo-500"
-                    href="../../pro/shop/payment.html"
+                    href="/student/account/sc/payment"
                   >
                     <svg
                       className="e731n qqwrg c9jt8 dark:text-neutral-200"
@@ -171,35 +173,7 @@ export default function Page() {
                   {/* Account Page Preview Card */}
                   <a
                     className="tbd2k dgycp relative aqyoh flex flex-col er6t7 focus:outline-hidden before:absolute before:inset-0 before:z-10 before:border before:border-gray-200 before:rounded-xl before:transition hover:before:border-2 hover:before:border-indigo-600 hover:before:shadow-lg focus:before:border-2 focus:before:border-indigo-600 focus:before:shadow-lg dark:bg-neutral-900 dark:before:border-neutral-700 dark:hover:before:border-indigo-500 dark:focus:before:border-indigo-500"
-                    href="../../pro/shop/email-newsletter.html"
-                  >
-                    <svg
-                      className="e731n qqwrg c9jt8 dark:text-neutral-200"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect width={20} height={16} x={2} y={4} rx={2} />
-                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                    </svg>
-                    <h4 className="jl6n6 sikx1 c9jt8 dark:text-neutral-200">
-                      Email Newsletter
-                    </h4>
-                    <p className="rwavo w4xo0 jy5gh dark:text-neutral-500">
-                      Select which emails you want to receive from us
-                    </p>
-                  </a>
-                  {/* End Account Page Preview Card */}
-                  {/* Account Page Preview Card */}
-                  <a
-                    className="tbd2k dgycp relative aqyoh flex flex-col er6t7 focus:outline-hidden before:absolute before:inset-0 before:z-10 before:border before:border-gray-200 before:rounded-xl before:transition hover:before:border-2 hover:before:border-indigo-600 hover:before:shadow-lg focus:before:border-2 focus:before:border-indigo-600 focus:before:shadow-lg dark:bg-neutral-900 dark:before:border-neutral-700 dark:hover:before:border-indigo-500 dark:focus:before:border-indigo-500"
-                    href="../../pro/shop/gift-cards.html"
+                    href="/student/account/sc/giftcard"
                   >
                     <svg
                       className="e731n qqwrg c9jt8 dark:text-neutral-200"
@@ -225,36 +199,7 @@ export default function Page() {
                       View balance or redeem a card, and purchase a new Gift Card
                     </p>
                   </a>
-                  {/* End Account Page Preview Card */}
-                  {/* Account Page Preview Card */}
-                  <a
-                    className="tbd2k dgycp relative aqyoh flex flex-col er6t7 focus:outline-hidden before:absolute before:inset-0 before:z-10 before:border before:border-gray-200 before:rounded-xl before:transition hover:before:border-2 hover:before:border-indigo-600 hover:before:shadow-lg focus:before:border-2 focus:before:border-indigo-600 focus:before:shadow-lg dark:bg-neutral-900 dark:before:border-neutral-700 dark:hover:before:border-indigo-500 dark:focus:before:border-indigo-500"
-                    href="../../pro/shop/returns-and-refunds.html"
-                  >
-                    <svg
-                      className="e731n qqwrg c9jt8 dark:text-neutral-200"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                      <path d="M3 3v5h5" />
-                    </svg>
-                    <h4 className="jl6n6 sikx1 c9jt8 dark:text-neutral-200">
-                      Returns &amp; Refunds
-                    </h4>
-                    <p className="rwavo w4xo0 jy5gh dark:text-neutral-500">
-                      Manage your returns and refunds
-                    </p>
-                  </a>
-                  {/* End Account Page Preview Card */}
-                </div>
+                   </div>
                 {/* End Grid */}
                 <div className="ah7xl">
                   {/* Contact Info */}
