@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, use } from "react"
-import { ChevronDown, ChevronRight, Check, Circle, ArrowLeft, ArrowRight, Play, Pause, Volume2, Maximize, Settings, Eye, Heart, Share, Download, MessageCircle, Bell, BookmarkPlus, MoreHorizontal, Clock, Users, Star, Award, Target, BookOpen, Trophy, Zap } from "lucide-react"
+import { ChevronDown, ChevronRight, Check, ArrowLeft,  Play, Pause, Volume2, Maximize, Settings, Eye, Share, Download, MessageCircle, Bell, BookmarkPlus, MoreHorizontal, Clock, Users, Star, Award, Target, BookOpen, Trophy, Zap } from "lucide-react"
 import { AppSidebar } from "@/components/student/app-sidebar"
 import { SiteHeader } from "@/components/student/site-header"
 import { Button } from "@/components/ui/button"
@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import Image from "next/image"
+// import Image from "next/image"
 import { cn } from "@/lib/utils"
 import AIChatIcon from "@/components/ai/page"
 
@@ -192,7 +192,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <Button variant="ghost" asChild className="text-gray-600 hover:text-gray-900 hover:bg-blue-50">
-                    <Link href={`/courses/${course.id}`} className="flex items-center">
+                    <Link href={`/courses/${course.id}/overview `} className="flex items-center">
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       Course Overview
                     </Link>
@@ -205,21 +205,25 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="sm" className="hover:bg-blue-50 hover:border-blue-200">
+                  <Button variant="outline" size="sm" className="hover:bg-blue-50 border-gray-300 hover:border-blue-200">
                     <BookmarkPlus className="h-4 w-4 mr-2" />
                     Save
                   </Button>
-                  <Button variant="outline" size="sm" className="hover:bg-green-50 hover:border-green-200">
+                  <Button variant="outline" size="sm" className="hover:bg-green-50 border-gray-300 hover:border-green-200">
                     <Share className="h-4 w-4 mr-2" />
                     Share
                   </Button>
-                  <Button variant="outline" size="sm" className="hover:bg-purple-50 hover:border-purple-200">
+                  <Button variant="outline" size="sm" className="hover:bg-purple-50 border-gray-300 hover:border-purple-200">
                     <Download className="h-4 w-4 mr-2" />
                     Resources
                   </Button>
-                  <Button variant="outline" size="sm" className="hover:bg-orange-50 hover:border-orange-200">
+
+
+                  {/* <Button variant="outline" size="sm" className="hover:bg-orange-50 hover:border-orange-200">
                     <MoreHorizontal className="h-4 w-4" />
-                  </Button>
+                  </Button> */}
+
+
                 </div>
               </div>
             </div>
@@ -234,9 +238,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-3">
-                          <Badge className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 animate-pulse">
-                            🔴 LIVE
-                          </Badge>
+
                           <Badge className="bg-blue-100 text-blue-800 px-3 py-1">
                             {course.level}
                           </Badge>
@@ -255,10 +257,6 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                           <div className="flex items-center space-x-2">
                             <Eye className="h-4 w-4 text-green-500" />
                             <span className="font-medium">56,420 views</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Heart className="h-4 w-4 text-pink-500" />
-                            <span className="font-medium">892 likes</span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Star className="h-4 w-4 text-yellow-500" />
@@ -281,7 +279,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/60 via-indigo-900/60 to-purple-900/60">
                           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent"></div>
                         </div>
-                        
+
                         {/* Enhanced Play Button */}
                         <Button
                           size="lg"
@@ -309,7 +307,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                           {/* Progress Bar */}
                           <div className="mb-6">
                             <div className="w-full bg-white/20 rounded-full h-2 cursor-pointer hover:h-3 transition-all duration-200">
-                              <div 
+                              <div
                                 className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 h-full rounded-full transition-all duration-300 relative"
                                 style={{ width: `${progressPercentage}%` }}
                               >
@@ -317,7 +315,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                               </div>
                             </div>
                           </div>
-                          
+
                           {/* Enhanced Control Buttons */}
                           <div className="flex items-center justify-between text-white">
                             <div className="flex items-center space-x-6">
@@ -347,7 +345,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
 
                   {/* Enhanced Learning Content Grid */}
                   <div className="grid md:grid-cols-2 gap-8">
-                    <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200 dark:from-blue-950/20 dark:to-cyan-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-gray-300 dark:from-blue-950/20 dark:to-cyan-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
                       <CardHeader className="pb-4">
                         <CardTitle className="text-xl flex items-center text-blue-700 dark:text-blue-300 font-bold">
                           🎯 Learning Objectives
@@ -370,7 +368,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200 dark:from-purple-950/20 dark:to-pink-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-gray-300 dark:from-purple-950/20 dark:to-pink-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
                       <CardHeader className="pb-4">
                         <CardTitle className="text-xl flex items-center text-purple-700 dark:text-purple-300 font-bold">
                           📋 Prerequisites
@@ -395,7 +393,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                   </div>
 
                   {/* Enhanced Interactive Transcript */}
-                  <Card className="shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Card className="shadow-lg border-gray-300 hover:shadow-xl transition-all duration-300">
                     <CardHeader>
                       <CardTitle className="text-xl flex items-center font-bold">
                         📝 Interactive Transcript
@@ -405,15 +403,15 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                       <div className="space-y-4 text-sm">
                         <div className="flex items-start space-x-4 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border-l-4 border-blue-500 hover:shadow-md transition-all duration-200">
                           <span className="text-blue-600 font-mono text-xs bg-blue-100 dark:bg-blue-900 px-3 py-2 rounded-full font-bold">00:03</span>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">Welcome to this comprehensive lesson on modern web development. Today we'll explore cutting-edge techniques...</p>
+                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">Welcome to this comprehensive lesson on modern web development. Today we&apos;ll explore cutting-edge techniques...</p>
                         </div>
                         <div className="flex items-start space-x-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer border border-transparent hover:border-gray-200 transition-all duration-200">
                           <span className="text-gray-500 font-mono text-xs bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-full font-bold">01:35</span>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">First, let's explore the fundamental concepts that will guide us through this learning journey...</p>
+                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">First, let&apos;s explore the fundamental concepts that will guide us through this learning journey...</p>
                         </div>
                         <div className="flex items-start space-x-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer border border-transparent hover:border-gray-200 transition-all duration-200">
                           <span className="text-gray-500 font-mono text-xs bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-full font-bold">03:18</span>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">Performance optimization is crucial in today's web landscape. Let's dive into practical techniques...</p>
+                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">Performance optimization is crucial in today&apos;s web landscape. Let&apos;s dive into practical techniques...</p>
                         </div>
                       </div>
                     </CardContent>
@@ -421,7 +419,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
 
                   {/* Enhanced Lesson Content */}
                   {currentItem?.content && (
-                    <Card className="shadow-lg hover:shadow-xl transition-all duration-300">
+                    <Card className="shadow-lg border-gray-300 hover:shadow-xl transition-all duration-300">
                       <CardHeader>
                         <CardTitle className="text-xl flex items-center font-bold">
                           📚 Lesson Content
@@ -439,13 +437,13 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
 
                   {/* Enhanced Navigation */}
                   <div className="flex justify-between items-center pt-8 border-t border-gray-200 dark:border-gray-700">
-                    <Button variant="outline" className="flex items-center gap-2 px-6 py-3 hover:bg-blue-50 hover:border-blue-200">
+                    <Button variant="outline" className="flex border-gray-300 items-center gap-2 px-6 py-3 hover:bg-blue-50 hover:border-blue-200">
                       <ArrowLeft size={16} /> Previous Lesson
                     </Button>
-                    <Button variant="outline" className="flex items-center gap-2 px-6 py-3 hover:bg-purple-50 hover:border-purple-200">
+                    <Button variant="outline" className="flex border-gray-300 items-center gap-2 px-6 py-3 hover:bg-purple-50 hover:border-purple-200">
                       <MessageCircle size={16} /> Ask Question
                     </Button>
-                    <Button 
+                    <Button
                       className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
                       onClick={() => currentItem && toggleCompletion(currentItem.id)}
                     >
@@ -456,7 +454,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
               </div>
 
               {/* Enhanced Right Sidebar */}
-              <div className="w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 overflow-y-auto shadow-lg">
+              <div className="w-80 bg-white dark:bg-gray-800 border-l border-gray-300 dark:border-gray-700 overflow-y-auto shadow-lg">
                 <div className="p-6 space-y-6">
                   {/* Enhanced Learning Progress */}
                   <Card className="shadow-lg border-2 border-blue-100 dark:border-blue-900">
@@ -472,7 +470,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                           {courseProgress}%
                         </div>
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 shadow-inner">
-                          <div 
+                          <div
                             className="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-1000 ease-out shadow-lg"
                             style={{ width: `${courseProgress}%` }}
                           />
@@ -485,7 +483,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                   </Card>
 
                   {/* Course Playlist/Navigation */}
-                  <Card className="shadow-lg">
+                  <Card className="shadow-lg border-gray-300">
                     <CardHeader className="pb-4">
                       <CardTitle className="text-lg font-bold flex items-center">
                         <BookOpen className="h-5 w-5 mr-2 text-purple-600" />
@@ -531,8 +529,8 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                                     item.completed
                                       ? "bg-green-500 text-white"
                                       : item.isActive
-                                      ? "bg-blue-500 text-white"
-                                      : "bg-gray-200 text-gray-600"
+                                        ? "bg-blue-500 text-white"
+                                        : "bg-gray-200 text-gray-600"
                                   )}>
                                     {item.completed ? (
                                       <Check className="h-3 w-3" />
@@ -557,11 +555,11 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                   </Card>
 
                   {/* Enhanced Today's Stats */}
-                  <Card className="shadow-lg border-2 border-green-100 dark:border-green-900">
+                  <Card className="shadow-lg border border-gray-300 dark:border-green-900">
                     <CardHeader className="pb-4">
                       <CardTitle className="text-lg font-bold flex items-center">
                         <Target className="h-5 w-5 mr-2 text-green-600" />
-                        Today's Stats
+                        Today&apos;s Stats
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -589,7 +587,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                   </Card>
 
                   {/* Enhanced Achievements */}
-                  <Card className="shadow-lg border-2 border-yellow-100 dark:border-yellow-900">
+                  <Card className="shadow-lg border-gray-300 dark:border-yellow-900">
                     <CardHeader className="pb-4">
                       <CardTitle className="text-lg font-bold flex items-center">
                         <Trophy className="h-5 w-5 mr-2 text-yellow-600" />
@@ -621,7 +619,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                   </Card>
 
                   {/* Enhanced Quick Actions */}
-                  <Card className="shadow-lg">
+                  <Card className="shadow-lg border-gray-300">
                     <CardHeader className="pb-4">
                       <CardTitle className="text-lg font-bold flex items-center">
                         <Zap className="h-5 w-5 mr-2 text-indigo-600" />
@@ -649,7 +647,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                   </Card>
 
                   {/* Study Tips */}
-                  <Card className="shadow-lg bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 border-2 border-indigo-200 dark:border-indigo-800">
+                  <Card className="shadow-lg border-gray-300 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 border-2 dark:border-indigo-800">
                     <CardHeader className="pb-4">
                       <CardTitle className="text-lg font-bold flex items-center text-indigo-700 dark:text-indigo-300">
                         💡 Study Tip
@@ -658,7 +656,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                     <CardContent>
                       <div className="space-y-3">
                         <p className="text-sm text-indigo-700 dark:text-indigo-300 leading-relaxed">
-                          <strong>Active Learning:</strong> Pause the video frequently to practice the concepts you've learned. 
+                          <strong>Active Learning:</strong> Pause the video frequently to practice the concepts you&apos;ve learned.
                           Build small projects to reinforce your understanding.
                         </p>
                         <div className="flex items-center space-x-2 text-xs text-indigo-600 dark:text-indigo-400">

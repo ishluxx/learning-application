@@ -49,6 +49,7 @@ export default function CoursesPage() {
   const levels = useMemo(() => Array.from(new Set(coursesData.map((c) => c.level))), []);
 
   const filteredCourses = useMemo(() => {
+
     return coursesData.filter((course) => {
       const matchesSearch =
         course.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -59,6 +60,7 @@ export default function CoursesPage() {
       const matchesStatus = statusFilter ? courseStatus === statusFilter : true;
       return matchesSearch && matchesLevel && matchesStatus;
     });
+
   }, [search, level, statusFilter]);
 
   const clearFilters = () => {
@@ -92,7 +94,7 @@ export default function CoursesPage() {
                 <p className="text-xl text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
                   Explore our comprehensive collection of courses designed to help you master new skills and advance your career.
                 </p>
-                
+
                 {/* Stats */}
                 <div className="flex flex-wrap gap-6 text-sm text-gray-600 dark:text-gray-400">
                   <div className="flex items-center gap-2">
@@ -227,7 +229,7 @@ export default function CoursesPage() {
                     </div>
                     <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">No courses found</h3>
                     <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
-                      We couldn't find any courses matching your search criteria. Try adjusting your filters or search terms.
+                      We couldn&apos;t find any courses matching your search criteria. Try adjusting your filters or search terms.
                     </p>
                     {hasActiveFilters && (
                       <Button onClick={clearFilters} variant="outline" className="rounded-xl">
@@ -241,7 +243,7 @@ export default function CoursesPage() {
                 filteredCourses.map((course) => {
                   const status = getCourseStatus(course);
                   const progress = getProgressPercentage(course);
-                  
+
                   let statusConfig = {
                     color: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200",
                     icon: "circle"
@@ -259,9 +261,9 @@ export default function CoursesPage() {
                     };
                   }
 
-                  let buttonConfig = {
+                  let buttonConfig: { text: string; variant: "default" | "secondary" } = {
                     text: "Start Learning",
-                    variant: "default" as const
+                    variant: "default"
                   };
 
                   if (status === "Completed") {
@@ -272,10 +274,11 @@ export default function CoursesPage() {
 
                   return (
                     <Card key={course.id} className="group relative overflow-hidden bg-white dark:bg-gray-900 border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-2xl">
+                      
                       {/* Progress Bar (for in-progress courses) */}
                       {status === "In Progress" && (
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700">
-                          <div 
+                          <div
                             className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500"
                             style={{ width: `${progress}%` }}
                           />
@@ -300,12 +303,14 @@ export default function CoursesPage() {
                             {status}
                           </Badge>
                         </div>
-                        
+
                         <CardDescription className="text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2">
                           {course.description}
                         </CardDescription>
                       </CardHeader>
 
+
+                      {/* Course content */}
                       <CardContent className="space-y-4">
                         {/* Course Image */}
                         <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700">
@@ -328,7 +333,8 @@ export default function CoursesPage() {
                               <span>{course.sections?.length || 0} sections</span>
                             </div>
                           </div>
-                          
+
+                          {/* Course Status and Progress  */}
                           {status === "In Progress" && (
                             <div className="text-sm font-medium text-blue-600 dark:text-blue-400">
                               {progress}% complete
@@ -337,7 +343,8 @@ export default function CoursesPage() {
                         </div>
                       </CardContent>
 
-                      <CardFooter className="pt-2 space-y-3">
+                      {/* Butttons for card  */}
+                      <CardFooter className="pt-2 space-y-3 flex-col">
                         <Button
                           asChild
                           variant={buttonConfig.variant}
@@ -345,9 +352,8 @@ export default function CoursesPage() {
                         >
                           <Link href={`/courses/${course.id}`}>{buttonConfig.text}</Link>
                         </Button>
-                        
-                        <Button variant="ghost" asChild className="w-full h-10 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800">
-                          <Link href={`/course/${course.id}/overview`} className="flex items-center justify-center gap-2">
+                        <Button className="w-full h-10 rounded-x bg-white text-black border border-gray-200 hover:bg-gray-50 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 transition-colors">
+                          <Link href={`/courses/${course.id}/overview`} className="flex items-center justify-center gap-2">
                             <Eye className="h-4 w-4" />
                             Course Overview
                           </Link>
