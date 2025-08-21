@@ -259,9 +259,9 @@ export default function CoursesPage() {
                     };
                   }
 
-                  let buttonConfig = {
+                  let buttonConfig: { text: string; variant: "default" | "secondary" } = {
                     text: "Start Learning",
-                    variant: "default" as const
+                    variant: "default"
                   };
 
                   if (status === "Completed") {
