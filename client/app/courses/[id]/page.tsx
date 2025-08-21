@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 // import Image from "next/image"
 import { cn } from "@/lib/utils"
+import AIChatIcon from "@/components/ai/page"
 
 // Course data structure - matches your existing types
 export interface CourseItem {
@@ -646,7 +647,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                   </Card>
 
                   {/* Study Tips */}
-                  <Card className="shadow-lg border-gray-300 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 border-2 border-indigo-200 dark:border-indigo-800">
+                  <Card className="shadow-lg border-gray-300 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 border-2 dark:border-indigo-800">
                     <CardHeader className="pb-4">
                       <CardTitle className="text-lg font-bold flex items-center text-indigo-700 dark:text-indigo-300">
                         💡 Study Tip
