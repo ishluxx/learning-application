@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/student/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { featuredRooms } from "@/data/rooms"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Icons } from "@/components/Icons/icons"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -22,6 +22,13 @@ export default function RoomPage() {
   const [activeTab, setActiveTab] = useState<'My Room' | 'Discovered' | 'Invited' | 'Pending'>('My Room');
   const [previewRoom, setPreviewRoom] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const roomsPerPage = 9;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, searchQuery]);
 
   const filterRooms = (rooms: any) => {
     if (!searchQuery) return rooms;
@@ -41,127 +48,121 @@ export default function RoomPage() {
       );
     }
 
+    const totalPages = Math.ceil(rooms.length / roomsPerPage);
+    const paginatedRooms = rooms.slice((currentPage - 1) * roomsPerPage, currentPage * roomsPerPage);
+
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {rooms.map((room: any) => {
-           const IconComponent = Icons[room.icon as keyof typeof Icons] || Icons.folder;
+      <>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {paginatedRooms.map((room: any) => {
+            const IconComponent = Icons[room.icon as keyof typeof Icons] || Icons.folder;
 
-          // Handle rooms based on their status:
-          if (room.status === 'joined') {
             return (
               <Card key={room.id} className="hover:shadow-xl transition-shadow">
                 <div className="p-6">
                   <div className="flex items-start justify-between">
-                    <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
-                      {IconComponent && <IconComponent className="w-6 h-6 text-blue-600 dark:text-blue-400" />}
+                    <div className={`p-3 rounded-lg ${
+                      room.status === 'joined' ? 'bg-blue-100 dark:bg-blue-900/30' :
+                      room.status === 'discovered' ? 'bg-purple-100 dark:bg-blue-900/30' :
+                      room.status === 'invited' ? 'bg-yellow-100 dark:bg-yellow-900/30' :
+                      'bg-green-100 dark:bg-green-900/30'
+                    }`}>
+                      {IconComponent && <IconComponent className={`w-6 h-6 ${
+                        room.status === 'joined' ? 'text-blue-600 dark:text-blue-400' :
+                        room.status === 'discovered' ? 'text-blue-600 dark:text-blue-400' :
+                        room.status === 'invited' ? 'text-yellow-600 dark:text-yellow-400' :
+                        'text-green-600 dark:text-green-400'
+                      }`} />}
                     </div>
-                    <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                    <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
+                      room.status === 'joined' ? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200' :
+                      room.status === 'discovered' ? 'bg-purple-100 text-blue-800 dark:bg-blue-700 dark:text-purple-200' :
+                      room.status === 'invited' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-200' :
+                      'bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-200'
+                    }`}>
                       {room.category}
                     </span>
                   </div>
                   <h3 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">{room.title}</h3>
                   <p className="mt-2 text-gray-600 dark:text-gray-400 line-clamp-2">{room.description}</p>
-                  <div className="mt-4 bg-gray-50 dark:bg-gray-800 p-2 rounded-md">
-                    <p className="text-sm text-gray-500 dark:text-gray-400 italic">
-                      "Engage in meaningful conversations, share resources, and build lasting knowledge connections."
-                    </p>
-                  </div>
-                  <div className="mt-6 flex justify-between items-center">
-                    <div className="flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                      <Icons.users className="h-4 w-4" />
-                      <span>{room.students.toLocaleString()}</span>
+
+                  {room.status === 'joined' && (
+                    <>
+                      <div className="mt-4 bg-gray-50 dark:bg-gray-800 p-2 rounded-md">
+                        <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                          "Engage in meaningful conversations, share resources, and build lasting knowledge connections."
+                        </p>
+                      </div>
+                      <div className="mt-6 flex justify-between items-center">
+                        <div className="flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                          <Icons.users className="h-4 w-4" />
+                          <span>{room.students.toLocaleString()}</span>
+                        </div>
+                        <Button onClick={() => setPreviewRoom(room)} size="sm" className="transition-transform hover:scale-105">
+                          Preview Room
+                        </Button>
+                      </div>
+                    </>
+                  )}
+
+                  {room.status === 'discovered' && (
+                    <div className="mt-6 flex justify-end">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setPreviewRoom(room)}
+                        className="transition-transform hover:scale-105"
+                      >
+                        Preview Room
+                      </Button>
                     </div>
-                    <Button onClick={() => setPreviewRoom(room)} size="sm" className="transition-transform hover:scale-105">
-                      Preview Room
-                    </Button>
-                  </div>
+                  )}
+
+                  {room.status === 'invited' && (
+                    <div className="mt-6 flex justify-end">
+                      <Button
+                        size="sm"
+                        onClick={() => alert(`Accepted invitation to ${room.title}`)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white transition-transform hover:scale-105"
+                      >
+                        Accept Invitation
+                      </Button>
+                    </div>
+                  )}
+
+                  {room.status === 'pending' && (
+                    <div className="mt-6 p-3 bg-green-50 dark:bg-green-900 rounded text-green-700 dark:text-green-300 text-sm italic">
+                      Your request to join this room is pending approval.
+                    </div>
+                  )}
                 </div>
               </Card>
             );
-          }
+          })}
+        </div>
 
-          if (room.status === 'discovered') {
-            return (
-              <Card key={room.id} className="hover:shadow-xl transition-shadow">
-                <div className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="bg-purple-100 dark:bg-blue-900/30 p-3 rounded-lg">
-                      {IconComponent && <IconComponent className="w-6 h-6 text-blue-600 dark:text-blue-400" />}
-                    </div>
-                    <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-blue-700 text-blue-800 dark:text-purple-200">
-                      {room.category}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">{room.title}</h3>
-                  <p className="mt-2 text-gray-600 dark:text-gray-400 line-clamp-2">{room.description}</p>
-                  <div className="mt-6 flex justify-end">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setPreviewRoom(room)}
-                      className="transition-transform hover:scale-105"
-                    >
-                      Preview Room
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            );
-          }
-
-          if (room.status === 'invited') {
-            return (
-              <Card key={room.id} className="hover:shadow-xl transition-shadow">
-                <div className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded-lg">
-                      {IconComponent && <IconComponent className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />}
-                    </div>
-                    <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-yellow-100 dark:bg-yellow-700 text-yellow-800 dark:text-yellow-200">
-                      {room.category}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">{room.title}</h3>
-                  <p className="mt-2 text-gray-600 dark:text-gray-400 line-clamp-2">{room.description}</p>
-                  <div className="mt-6 flex justify-end">
-                    <Button
-                      size="sm"
-                      onClick={() => alert(`Accepted invitation to ${room.title}`)} // Replace with actual accept logic
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white transition-transform hover:scale-105"
-                    >
-                      Accept Invitation
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            );
-          }
-
-          if (room.status === 'pending') {
-            return (
-              <Card key={room.id} className="hover:shadow-xl transition-shadow">
-                <div className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg">
-                      {IconComponent && <IconComponent className="w-6 h-6 text-green-600 dark:text-green-400" />}
-                    </div>
-                    <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-200">
-                      {room.category}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">{room.title}</h3>
-                  <p className="mt-2 text-gray-600 dark:text-gray-400 line-clamp-2">{room.description}</p>
-                  <div className="mt-6 p-3 bg-green-50 dark:bg-green-900 rounded text-green-700 dark:text-green-300 text-sm italic">
-                    Your request to join this room is pending approval.
-                  </div>
-                </div>
-              </Card>
-            );
-          }
-
-          return null; // fallback if none matched
-        })}
-      </div>
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-4 mt-6">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              Page {currentPage} of {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </Button>
+          </div>
+        )}
+      </>
     );
   };
 
@@ -183,6 +184,7 @@ export default function RoomPage() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
+
         <div className="top-0 z-50 bg-white dark:bg-[#141414] px-6 py-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold">Classrooms</h1>
           <div className="flex gap-4 items-center">

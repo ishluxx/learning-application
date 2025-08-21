@@ -58,8 +58,8 @@ export default function Header() {
                <Link href="/student" className="s53ws sfv8v hidden md:flex items-center b1nd2 w4xo0 s1lil w9dei c9jt8 pb094 d05xb disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden r17tr dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
                 Go to Student Dashboard  
             </Link>
-                <Link href="/teacher" className="s53ws sfv8v flex items-center b1nd2 s1lil z4zqw sqycf w9dei c9jt8 pb094 d05xb disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden r17tr dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
-                Go to Teacher Dashboard  
+                <Link href="/login/select-role" className="s53ws sfv8v flex items-center b1nd2 s1lil z4zqw sqycf w9dei c9jt8 pb094 d05xb disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden r17tr dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
+                Go Started  
             </Link>
                 <a
                 className="s53ws sfv8v inline-flex items-center b1nd2 s1lil z4zqw sqycf pb094 xus2s owkrq kew0r qfc1d e82ur focus:outline-hidden f9dn7 ss4o9 disabled:opacity-50 disabled:pointer-events-none"

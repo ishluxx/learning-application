@@ -12,15 +12,15 @@ import {
 
 export function SectionCards() {
   return (
-    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t  lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>Total Revenue</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl ">
             $1,250.00
           </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
+          <CardAction >
+            <Badge variant="outline" className="inline-flex items-center n6i5x sikx1 w4xo0 ad7q2 dark:text-emerald-500">
               <IconTrendingUp />
               +12.5%
             </Badge>
@@ -42,7 +42,7 @@ export function SectionCards() {
             1,234
           </CardTitle>
           <CardAction>
-            <Badge variant="outline">
+            <Badge variant="outline" className="inline-flex items-center n6i5x sikx1 w4xo0 ad7q2 dark:text-red-400  text-red-400">
               <IconTrendingDown />
               -20%
             </Badge>
@@ -64,7 +64,7 @@ export function SectionCards() {
             45,678
           </CardTitle>
           <CardAction>
-            <Badge variant="outline">
+            <Badge variant="outline" className="inline-flex items-center n6i5x sikx1 w4xo0 ad7q2 dark:text-emerald-500">
               <IconTrendingUp />
               +12.5%
             </Badge>
@@ -84,7 +84,7 @@ export function SectionCards() {
             4.5%
           </CardTitle>
           <CardAction>
-            <Badge variant="outline">
+            <Badge variant="outline" className="inline-flex items-center n6i5x sikx1 w4xo0 ad7q2 dark:text-emerald-500">
               <IconTrendingUp />
               +4.5%
             </Badge>
