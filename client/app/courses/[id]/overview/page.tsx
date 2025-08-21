@@ -1,134 +1,19 @@
 'use client'
 
 import { useState, use } from 'react'
-import { ArrowLeft, CheckCircle2, Circle, Clock, Users, Star, Play, BookOpen, Award, Target, ChevronDown, ChevronRight, Check, Eye, Heart, Share, Download, MessageCircle, Bell, BookmarkPlus, MoreHorizontal } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Circle, Clock, Users, Star, Play, BookOpen, Award, Target, ChevronDown, ChevronRight } from 'lucide-react'
 import { AppSidebar } from "@/components/student/app-sidebar"
 import { SiteHeader } from "@/components/student/site-header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import Link from "next/link"
-import Image from "next/image"
+// import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
-// Course data structure - matches your existing types
-export interface CourseItem {
-  id: string;
-  title: string;
-  completed: boolean;
-  isActive?: boolean;
-  content?: string;
-}
+import { coursesData ,CourseSection} from "@/data/courses"
 
-export interface CourseSection {
-  id: string;
-  title: string;
-  items: CourseItem[];
-  isOpen: boolean;
-}
-
-export interface Course {
-  id: string;
-  title: string;
-  description: string;
-  instructor?: string;
-  duration: string;
-  level: string;
-  image?: string;
-  sections?: CourseSection[];
-}
-
-// Sample course data matching your structure
-const coursesData: Course[] = [
-  {
-    id: '1',
-    title: 'Introduction to React',
-    description: 'Learn the fundamentals of React including components, state, and props.',
-    instructor: 'Jane Smith',
-    duration: '4 weeks',
-    level: 'Beginner',
-    image: '/images/How-to-Learn-ReactJS-in-2021.png',
-    sections: [
-      {
-        id: "getting-started",
-        title: "Getting Started",
-        isOpen: true,
-        items: [
-          { 
-            id: "react-intro", 
-            title: "Introduction to React", 
-            completed: true, 
-            isActive: true, 
-            content: "Welcome to the Introduction to React! In this lesson, you'll learn what React is, its history, and why it's so popular for building user interfaces. You'll also see real-world examples of React apps and get tips for setting up your first project.\n\nRelated topics: JavaScript frameworks, SPA, Virtual DOM.\nPractical tip: Use Create React App or Vite for quick setup." 
-          },
-          { 
-            id: "react-components", 
-            title: "Components & Props", 
-            completed: true, 
-            content: "Components are the building blocks of React applications. You'll learn how to create functional and class components, pass data using props, and organize your UI into reusable pieces.\n\nRelated topics: Component hierarchy, prop drilling, composition.\nPractical tip: Keep components small and focused for better maintainability." 
-          },
-          { 
-            id: "react-state", 
-            title: "State & Lifecycle", 
-            completed: false, 
-            content: "State allows React components to change their output over time in response to user actions, network responses, and anything else. You'll learn about useState, setState, and lifecycle methods like componentDidMount.\n\nRelated topics: useEffect, local vs global state, state management libraries.\nPractical tip: Use state wisely to avoid unnecessary re-renders." 
-          },
-        ],
-      },
-      {
-        id: "advanced",
-        title: "Advanced Concepts",
-        isOpen: true,
-        items: [
-          { 
-            id: "react-hooks", 
-            title: "Hooks in Depth", 
-            completed: false, 
-            content: "Hooks let you use state and other React features in functional components. You'll learn about useState, useEffect, useContext, and how to build custom hooks for reusable logic.\n\nRelated topics: Dependency arrays, custom hooks, rules of hooks.\nPractical tip: Always start custom hook names with 'use' and follow the rules of hooks." 
-          },
-          { 
-            id: "react-context", 
-            title: "Context API", 
-            completed: false, 
-            content: "Context provides a way to pass data through the component tree without having to pass props down manually at every level. You'll learn how to create and use context for global state like themes and authentication.\n\nRelated topics: Provider pattern, useContext, Redux.\nPractical tip: Use context for truly global data, not for every prop." 
-          },
-        ],
-      },
-    ]
-  },
-  {
-    id: '2',
-    title: 'Advanced TypeScript',
-    description: 'Master advanced TypeScript concepts for large-scale applications.',
-    instructor: 'John Doe',
-    duration: '6 weeks',
-    level: 'Advanced',
-    image: '/images/learn_typescipt.jpeg',
-    sections: [
-      {
-        id: "types",
-        title: "Type System",
-        isOpen: true,
-        items: [
-          { 
-            id: "advanced-types", 
-            title: "Advanced Types", 
-            completed: false, 
-            isActive: true, 
-            content: "Explore advanced TypeScript types like union, intersection, mapped, and conditional types. Learn how to use them to write safer and more expressive code.\n\nRelated topics: Generics, keyof, typeof, infer.\nPractical tip: Use mapped types for DRY code and conditional types for flexible APIs." 
-          },
-          { 
-            id: "type-guards", 
-            title: "Type Guards & Type Predicates", 
-            completed: false, 
-            content: "Type guards and predicates help you narrow down types within conditional blocks, ensuring type safety and improving code clarity.\n\nRelated topics: typeof, instanceof, custom type guards.\nPractical tip: Use type predicates for complex type checks in large codebases." 
-          },
-        ],
-      },
-    ]
-  },
-];
 
 export default function CourseOverviewPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
   const params = use(paramsPromise)
@@ -143,6 +28,7 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
           <Button asChild size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-300/30 transition">
             <Link href="/courses">Back to Courses</Link>
           </Button>
+
         </div>
       </div>
     )
@@ -190,8 +76,8 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
   return (
     <SidebarProvider
       style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)", 
-        "--header-height": "calc(var(--spacing) * 12)", 
+        "--sidebar-width": "calc(var(--spacing) * 72)",
+        "--header-height": "calc(var(--spacing) * 12)",
       } as React.CSSProperties}
     >
       <AppSidebar variant="inset" />
@@ -199,44 +85,17 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
         <SiteHeader />
 
         <main className="container mx-auto p-6 select-none">
-          
+
           {/* Header Navigation */}
           <div className="flex items-center justify-between mb-10">
             <div className="flex items-center">
-              <Button 
-                variant="ghost" 
-                asChild 
-                className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-2 rounded-full font-medium shadow-lg"
+              <Button
+                variant="ghost" asChild className="text-gray-600 hover:text-gray-900 hover:bg-blue-50"
               >
                 <Link href="/courses" className="flex items-center">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Course Modules
                 </Link>
-              </Button>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="text-gray-600 hover:text-gray-900 border-gray-300 px-4 py-2 rounded-full font-medium"
-              >
-                <BookmarkPlus className="h-4 w-4 mr-2" />
-                Save
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="text-gray-600 hover:text-gray-900 border-gray-300 px-4 py-2 rounded-full font-medium"
-              >
-                <Share className="h-4 w-4 mr-2" />
-                Share
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="text-gray-600 hover:text-gray-900 border-gray-300 px-4 py-2 rounded-full font-medium"
-              >
-                📊 Analytics & Progress
               </Button>
             </div>
           </div>
@@ -257,18 +116,18 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                       {course.description}
                     </p>
                     <div className="flex flex-wrap items-center gap-6 text-sm">
-                      <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-md">
+                      <div className="flex items-center space-x-2  px-4 py-2 ">
                         <Clock className="h-4 w-4 text-blue-500" />
                         <span className="font-medium">{course.duration}</span>
                       </div>
-                      <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-md">
+                      <div className="flex items-center space-x-2  px-4 py-2 ">
                         <Users className="h-4 w-4 text-green-500" />
                         <span className="font-medium">{course.instructor}</span>
                       </div>
                       <Badge className="bg-gradient-to-r from-orange-400 to-orange-500 text-white px-4 py-2 text-sm font-medium shadow-md">
                         {course.level}
                       </Badge>
-                      <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-md">
+                      <div className="flex items-center space-x-2  px-4 py-2 ">
                         <Star className="h-4 w-4 text-yellow-500" />
                         <span className="font-medium">88% popularity</span>
                       </div>
@@ -281,7 +140,7 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                   <div className="text-xs text-gray-400 mt-1">completed</div>
                 </div>
               </div>
-              
+
               {/* Enhanced Progress Bar */}
               <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-4">
@@ -289,7 +148,7 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                   <span className="text-sm text-gray-500 font-medium">{progress}% Complete</span>
                 </div>
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 shadow-inner">
-                  <div 
+                  <div
                     className="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-1000 ease-out shadow-lg"
                     style={{ width: `${progress}%` }}
                   />
@@ -300,7 +159,7 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
 
           {/* Course Statistics */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card className="bg-white p-6 border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="bg-white p-6 border border-blue-100 dark:bg-black shadow-lg hover:shadow-xl transition-all duration-300">
               <CardContent className="p-0">
                 <div className="flex items-center justify-between">
                   <div>
@@ -313,8 +172,8 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                 </div>
               </CardContent>
             </Card>
-            
-            <Card className="bg-white p-6 border border-green-100 shadow-lg hover:shadow-xl transition-all duration-300">
+
+            <Card className="bg-white p-6 border border-green-100 dark:bg-black shadow-lg hover:shadow-xl transition-all duration-300">
               <CardContent className="p-0">
                 <div className="flex items-center justify-between">
                   <div>
@@ -327,8 +186,8 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                 </div>
               </CardContent>
             </Card>
-            
-            <Card className="bg-white p-6 border border-purple-100 shadow-lg hover:shadow-xl transition-all duration-300">
+
+            <Card className="bg-white p-6 border border-purple-100 dark:bg-black shadow-lg hover:shadow-xl transition-all duration-300">
               <CardContent className="p-0">
                 <div className="flex items-center justify-between">
                   <div>
@@ -341,8 +200,8 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                 </div>
               </CardContent>
             </Card>
-            
-            <Card className="bg-white p-6 border border-orange-100 shadow-lg hover:shadow-xl transition-all duration-300">
+
+            <Card className="bg-white p-6 border border-orange-100 dark:bg-black shadow-lg hover:shadow-xl transition-all duration-300">
               <CardContent className="p-0">
                 <div className="flex items-center justify-between">
                   <div>
@@ -357,11 +216,13 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
             </Card>
           </div>
 
+
+
           {/* Course Sections */}
           <div className="space-y-6">
             {sections.map((section, sectionIndex) => (
               <Card key={section.id} className="overflow-hidden border border-gray-200 shadow-md">
-                <CardHeader 
+                <CardHeader
                   className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                   onClick={() => toggleSection(section.id)}
                 >
@@ -394,14 +255,14 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                         const overallIndex = sections
                           .slice(0, sectionIndex)
                           .reduce((acc, s) => acc + s.items.length, 0) + itemIndex + 1;
-                        
+
                         return (
-                          <Card 
-                            key={item.id} 
+                          <Card
+                            key={item.id}
                             className={cn(
                               "transition-all duration-300 hover:shadow-xl hover:scale-[1.01] border cursor-pointer",
                               item.completed
-                                ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 shadow-lg shadow-green-100/50 dark:from-green-950/20 dark:to-emerald-950/20 dark:border-green-800'
+                                ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 shadow-lg  dark:from-green-950/20 dark:to-emerald-950/20 dark:border-green-800'
                                 : 'bg-white border-gray-200 shadow-md hover:shadow-lg dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-gray-750'
                             )}
                             onClick={() => setActiveItem(item.id)}
@@ -422,20 +283,20 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                                       <span className="font-bold text-lg">{overallIndex}</span>
                                     )}
                                   </div>
-                                  
+
                                   {/* Enhanced Content */}
                                   <div className="flex-1">
                                     <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-2 leading-tight">
                                       {item.title}
                                     </h3>
-                                    
+
                                     {/* Lesson Preview */}
                                     {item.content && (
                                       <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2 max-w-2xl">
                                         {item.content.split('\n')[0]}
                                       </p>
                                     )}
-                                    
+
                                     <div className="flex flex-wrap items-center gap-3 text-sm">
                                       <div className="flex items-center space-x-1 bg-blue-100 dark:bg-blue-900/30 px-3 py-1 rounded-full">
                                         <Clock className="h-3 w-3 text-blue-600" />
@@ -447,24 +308,10 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                                       <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 text-xs font-medium">
                                         {course.level.toLowerCase()}
                                       </Badge>
-                                      <div className="flex items-center space-x-3 text-gray-500">
-                                        <span className="flex items-center space-x-1">
-                                          <span>⭐</span>
-                                          <span className="font-medium">5.5k</span>
-                                        </span>
-                                        <span className="flex items-center space-x-1">
-                                          <span>👍</span>
-                                          <span className="font-medium">993</span>
-                                        </span>
-                                        <span className="flex items-center space-x-1">
-                                          <span>📊</span>
-                                          <span className="font-medium">4.8</span>
-                                        </span>
-                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                                
+
                                 {/* Enhanced Action Section */}
                                 <div className="flex items-center space-x-4">
                                   {item.completed && (
@@ -472,23 +319,23 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                                       ✨ COMPLETED
                                     </Badge>
                                   )}
-                                  <Button 
-                                    variant="ghost" 
+                                  <Button
+                                    variant="ghost"
                                     size="lg"
                                     className={cn(
                                       "p-3 rounded-full transition-all duration-300 hover:scale-110",
-                                      item.completed 
-                                        ? 'text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-950/30' 
+                                      item.completed
+                                        ? 'text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-950/30'
                                         : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/30'
                                     )}
                                     asChild
                                   >
-                                    <Link href={`/courses/${course.id}/learn`}>
+                                    <Link href={`/courses/${course.id}  `}>
                                       <Play className="h-5 w-5" />
                                     </Link>
                                   </Button>
-                                  <Button 
-                                    variant="outline" 
+                                  <Button
+                                    variant="outline"
                                     size="sm"
                                     className="text-gray-600 hover:text-gray-900"
                                     onClick={(e) => {
@@ -513,7 +360,7 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                 )}
               </Card>
             ))}
-            
+
             {/* Enhanced Final Assessment Card */}
             <Card className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20 dark:border-purple-800">
               <CardContent className="p-8">
@@ -540,8 +387,8 @@ export default function CourseOverviewPage({ params: paramsPromise }: { params: 
                       </div>
                     </div>
                   </div>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="lg"
                     className="text-purple-600 hover:text-purple-700 hover:bg-purple-50 dark:hover:bg-purple-950/30 p-3 rounded-full transition-all duration-300 hover:scale-110"
                   >
