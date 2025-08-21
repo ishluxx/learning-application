@@ -2,18 +2,14 @@
 loxx
 
 ## task role
-Student profile ui
+Student profile the remaining pages with the proper student info 
 
 ## features
-- Student account info pages
-- student report's +
-- 
+- Student account info pages with the functinality require for each one clearly
 
-## done before 07-08-025
+## done before 25-08-025
 ## assets and resources to be use in order to mantain ui structure 
 
-main are:
+only use assets from:
 -https://ui.shadcn.com/
 -https://preline.co/index.
-
-NB: other are optional
