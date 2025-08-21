@@ -11,7 +11,94 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 // import Image from "next/image"
 import { cn } from "@/lib/utils"
-import { coursesData, Course, CourseItem, CourseSection } from "@/data/courses"
+import AIChatIcon from "@/components/ai/page"
+
+// Course data structure - matches your existing types
+export interface CourseItem {
+  id: string;
+  title: string;
+  completed: boolean;
+  isActive?: boolean;
+  content?: string;
+}
+
+export interface CourseSection {
+  id: string;
+  title: string;
+  items: CourseItem[];
+  isOpen: boolean;
+}
+
+export interface Course {
+  id: string;
+  title: string;
+  description: string;
+  instructor?: string;
+  duration: string;
+  level: string;
+  image?: string;
+  sections?: CourseSection[];
+}
+
+// Sample course data matching your structure
+const coursesData: Course[] = [
+  {
+    id: '1',
+    title: 'Introduction to React',
+    description: 'Learn the fundamentals of React including components, state, and props.',
+    instructor: 'Jane Smith',
+    duration: '4 weeks',
+    level: 'Beginner',
+    image: '/images/How-to-Learn-ReactJS-in-2021.png',
+    sections: [
+      {
+        id: "getting-started",
+        title: "Getting Started",
+        isOpen: true,
+        items: [
+          { 
+            id: "react-intro", 
+            title: "Introduction to React", 
+            completed: true, 
+            isActive: true, 
+            content: "Welcome to the Introduction to React! In this lesson, you'll learn what React is, its history, and why it's so popular for building user interfaces. You'll also see real-world examples of React apps and get tips for setting up your first project.\n\nRelated topics: JavaScript frameworks, SPA, Virtual DOM.\nPractical tip: Use Create React App or Vite for quick setup." 
+          },
+          { 
+            id: "react-components", 
+            title: "Components & Props", 
+            completed: true, 
+            content: "Components are the building blocks of React applications. You'll learn how to create functional and class components, pass data using props, and organize your UI into reusable pieces.\n\nRelated topics: Component hierarchy, prop drilling, composition.\nPractical tip: Keep components small and focused for better maintainability." 
+          },
+          { 
+            id: "react-state", 
+            title: "State & Lifecycle", 
+            completed: false, 
+            content: "State allows React components to change their output over time in response to user actions, network responses, and anything else. You'll learn about useState, setState, and lifecycle methods like componentDidMount.\n\nRelated topics: useEffect, local vs global state, state management libraries.\nPractical tip: Use state wisely to avoid unnecessary re-renders." 
+          },
+        ],
+      },
+      {
+        id: "advanced",
+        title: "Advanced Concepts",
+        isOpen: true,
+        items: [
+          { 
+            id: "react-hooks", 
+            title: "Hooks in Depth", 
+            completed: false, 
+            content: "Hooks let you use state and other React features in functional components. You'll learn about useState, useEffect, useContext, and how to build custom hooks for reusable logic.\n\nRelated topics: Dependency arrays, custom hooks, rules of hooks.\nPractical tip: Always start custom hook names with 'use' and follow the rules of hooks." 
+          },
+          { 
+            id: "react-context", 
+            title: "Context API", 
+            completed: false, 
+            content: "Context provides a way to pass data through the component tree without having to pass props down manually at every level. You'll learn how to create and use context for global state like themes and authentication.\n\nRelated topics: Provider pattern, useContext, Redux.\nPractical tip: Use context for truly global data, not for every prop." 
+          },
+        ],
+      },
+    ]
+  }
+];
 
 export default function CourseLearningPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
   const params = use(paramsPromise)
@@ -98,6 +185,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
 
         <div className="flex h-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
           {/* Main Content Area */}
+           <AIChatIcon />
           <div className="flex-1 flex flex-col">
             {/* Enhanced Header Bar */}
             <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 shadow-sm">
@@ -559,7 +647,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                   </Card>
 
                   {/* Study Tips */}
-                  <Card className="shadow-lg border-gray-300 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 border-2 border-indigo-200 dark:border-indigo-800">
+                  <Card className="shadow-lg border-gray-300 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 border-2 dark:border-indigo-800">
                     <CardHeader className="pb-4">
                       <CardTitle className="text-lg font-bold flex items-center text-indigo-700 dark:text-indigo-300">
                         💡 Study Tip

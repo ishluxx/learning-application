@@ -1,6 +1,5 @@
 import { AppSidebar } from "@/components/student/app-sidebar"
 import { ChartAreaInteractive } from "@/components/student/chart-area-interactive"
-import { DataTable } from "@/components/student/data-table"
 import { SectionCards } from "@/components/student/section-cards"
 import { SiteHeader } from "@/components/student/site-header"
 import {
@@ -32,9 +31,7 @@ export default function Page() {
               <div className="px-4 lg:px-6">
                 <ChartAreaInteractive />
               </div>
-              <DataTable data={data} />
             </div>
-           
           </div>
         </div>
       </SidebarInset>
