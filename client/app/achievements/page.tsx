@@ -127,7 +127,7 @@ export default function StudentAchievementPage() {
                     className="hidden sm:flex items-center gap-2 rounded-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-xl"
                   >
                     <Sparkles className="h-4 w-4" />
-                    <span className="text-sm font-medium">You're on a 18-day streak!</span>
+                    <span className="text-sm font-medium">You&apos;re on a 18-day streak!</span>
                   </motion.div>
                 </div>
 
