@@ -111,34 +111,7 @@ export default function Page() {
                     </p>
                   </Link>
                   {/* End Account Page Preview Card */}
-                  {/* Account Page Preview Card */}
-                  <a
-                    className="tbd2k dgycp relative aqyoh flex flex-col er6t7 focus:outline-hidden before:absolute before:inset-0 before:z-10 before:border before:border-gray-200 before:rounded-xl before:transition hover:before:border-2 hover:before:border-indigo-600 hover:before:shadow-lg focus:before:border-2 focus:before:border-indigo-600 focus:before:shadow-lg dark:bg-neutral-900 dark:before:border-neutral-700 dark:hover:before:border-indigo-500 dark:focus:before:border-indigo-500"
-                    href="/student/account/sc/achivements"
-                  >
-                    <svg
-                      className="e731n qqwrg c9jt8 dark:text-neutral-200"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M15 22a1 1 0 0 1-1-1v-4a1 1 0 0 1 .445-.832l3-2a1 1 0 0 1 1.11 0l3 2A1 1 0 0 1 22 17v4a1 1 0 0 1-1 1z" />
-                      <path d="M18 10a8 8 0 0 0-16 0c0 4.993 5.539 10.193 7.399 11.799a1 1 0 0 0 .601.2" />
-                      <path d="M18 22v-3" />
-                      <circle cx={10} cy={10} r={3} />
-                    </svg>
-                    <h4 className="jl6n6 sikx1 c9jt8 dark:text-neutral-200">Achivement</h4>
-                    <p className="rwavo w4xo0 jy5gh dark:text-neutral-500">
-                      Manage your billing &amp; shipping addresses
-                    </p>
-                  </a>
-                  {/* End Account Page Preview Card */}
+                  
                   {/* Account Page Preview Card */}
                   <a
                     className="tbd2k dgycp relative aqyoh flex flex-col er6t7 focus:outline-hidden before:absolute before:inset-0 before:z-10 before:border before:border-gray-200 before:rounded-xl before:transition hover:before:border-2 hover:before:border-indigo-600 hover:before:shadow-lg focus:before:border-2 focus:before:border-indigo-600 focus:before:shadow-lg dark:bg-neutral-900 dark:before:border-neutral-700 dark:hover:before:border-indigo-500 dark:focus:before:border-indigo-500"
