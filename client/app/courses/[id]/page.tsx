@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, use } from "react"
-import { ChevronDown, ChevronRight, Check, ArrowLeft,  Play, Pause, Volume2, Maximize, Settings, Eye, Share, Download, MessageCircle, Bell, BookmarkPlus, MoreHorizontal, Clock, Users, Star, Award, Target, BookOpen, Trophy, Zap } from "lucide-react"
+import { ChevronDown, ChevronRight, Check, ArrowLeft,  Play, Pause, Volume2, Maximize, Settings, Eye, Clock, Users, Star, Award, Target, BookOpen, Trophy, Zap } from "lucide-react"
 import { AppSidebar } from "@/components/student/app-sidebar"
 import { SiteHeader } from "@/components/student/site-header"
 import { Button } from "@/components/ui/button"
@@ -11,94 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 // import Image from "next/image"
 import { cn } from "@/lib/utils"
-import AIChatIcon from "@/components/ai/page"
-
-// Course data structure - matches your existing types
-export interface CourseItem {
-  id: string;
-  title: string;
-  completed: boolean;
-  isActive?: boolean;
-  content?: string;
-}
-
-export interface CourseSection {
-  id: string;
-  title: string;
-  items: CourseItem[];
-  isOpen: boolean;
-}
-
-export interface Course {
-  id: string;
-  title: string;
-  description: string;
-  instructor?: string;
-  duration: string;
-  level: string;
-  image?: string;
-  sections?: CourseSection[];
-}
-
-// Sample course data matching your structure
-const coursesData: Course[] = [
-  {
-    id: '1',
-    title: 'Introduction to React',
-    description: 'Learn the fundamentals of React including components, state, and props.',
-    instructor: 'Jane Smith',
-    duration: '4 weeks',
-    level: 'Beginner',
-    image: '/images/How-to-Learn-ReactJS-in-2021.png',
-    sections: [
-      {
-        id: "getting-started",
-        title: "Getting Started",
-        isOpen: true,
-        items: [
-          { 
-            id: "react-intro", 
-            title: "Introduction to React", 
-            completed: true, 
-            isActive: true, 
-            content: "Welcome to the Introduction to React! In this lesson, you'll learn what React is, its history, and why it's so popular for building user interfaces. You'll also see real-world examples of React apps and get tips for setting up your first project.\n\nRelated topics: JavaScript frameworks, SPA, Virtual DOM.\nPractical tip: Use Create React App or Vite for quick setup." 
-          },
-          { 
-            id: "react-components", 
-            title: "Components & Props", 
-            completed: true, 
-            content: "Components are the building blocks of React applications. You'll learn how to create functional and class components, pass data using props, and organize your UI into reusable pieces.\n\nRelated topics: Component hierarchy, prop drilling, composition.\nPractical tip: Keep components small and focused for better maintainability." 
-          },
-          { 
-            id: "react-state", 
-            title: "State & Lifecycle", 
-            completed: false, 
-            content: "State allows React components to change their output over time in response to user actions, network responses, and anything else. You'll learn about useState, setState, and lifecycle methods like componentDidMount.\n\nRelated topics: useEffect, local vs global state, state management libraries.\nPractical tip: Use state wisely to avoid unnecessary re-renders." 
-          },
-        ],
-      },
-      {
-        id: "advanced",
-        title: "Advanced Concepts",
-        isOpen: true,
-        items: [
-          { 
-            id: "react-hooks", 
-            title: "Hooks in Depth", 
-            completed: false, 
-            content: "Hooks let you use state and other React features in functional components. You'll learn about useState, useEffect, useContext, and how to build custom hooks for reusable logic.\n\nRelated topics: Dependency arrays, custom hooks, rules of hooks.\nPractical tip: Always start custom hook names with 'use' and follow the rules of hooks." 
-          },
-          { 
-            id: "react-context", 
-            title: "Context API", 
-            completed: false, 
-            content: "Context provides a way to pass data through the component tree without having to pass props down manually at every level. You'll learn how to create and use context for global state like themes and authentication.\n\nRelated topics: Provider pattern, useContext, Redux.\nPractical tip: Use context for truly global data, not for every prop." 
-          },
-        ],
-      },
-    ]
-  }
-];
+import { coursesData, Course, CourseItem, CourseSection } from "@/data/courses"
 
 export default function CourseLearningPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
   const params = use(paramsPromise)
@@ -185,45 +98,23 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
 
         <div className="flex h-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
           {/* Main Content Area */}
-           <AIChatIcon />
           <div className="flex-1 flex flex-col">
             {/* Enhanced Header Bar */}
-            <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 shadow-sm">
+            <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 dark:text-white px-6 py-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <Button variant="ghost" asChild className="text-gray-600 hover:text-gray-900 hover:bg-blue-50">
+                  <Button variant="ghost" asChild className="text-gray-600 dark:text-white ">
                     <Link href={`/courses/${course.id}/overview `} className="flex items-center">
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       Course Overview
                     </Link>
                   </Button>
                   <div className="h-6 w-px bg-gray-300"></div>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <div className="flex items-center space-x-2 text-sm dark:text-white">
                     <span className="font-medium">{course.title}</span>
                     <span>•</span>
                     <span>Lesson {sections.flatMap(s => s.items).findIndex(item => item.isActive) + 1} of {totalLessons}</span>
                   </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="sm" className="hover:bg-blue-50 border-gray-300 hover:border-blue-200">
-                    <BookmarkPlus className="h-4 w-4 mr-2" />
-                    Save
-                  </Button>
-                  <Button variant="outline" size="sm" className="hover:bg-green-50 border-gray-300 hover:border-green-200">
-                    <Share className="h-4 w-4 mr-2" />
-                    Share
-                  </Button>
-                  <Button variant="outline" size="sm" className="hover:bg-purple-50 border-gray-300 hover:border-purple-200">
-                    <Download className="h-4 w-4 mr-2" />
-                    Resources
-                  </Button>
-
-
-                  {/* <Button variant="outline" size="sm" className="hover:bg-orange-50 hover:border-orange-200">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button> */}
-
-
                 </div>
               </div>
             </div>
@@ -276,7 +167,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                     <CardContent className="p-0">
                       <div className="relative aspect-video w-full flex items-center justify-center">
                         {/* Dynamic Video Background */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/60 via-indigo-900/60 to-purple-900/60">
+                        <div className="absolute">
                           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent"></div>
                         </div>
 
@@ -294,13 +185,9 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                         </Button>
 
                         {/* Enhanced Badges */}
-                        <Badge className="absolute top-6 left-6 bg-black/60 text-white px-4 py-2 backdrop-blur-sm">
+                        {/* <Badge className="absolute top-6 left-6 bg-black/60 text-white px-4 py-2 backdrop-blur-sm">
                           4K Ultra HD
-                        </Badge>
-
-                        <Badge className="absolute top-6 right-6 bg-red-500/90 text-white px-4 py-2 animate-pulse backdrop-blur-sm">
-                          🔴 LIVE
-                        </Badge>
+                        </Badge> */}
 
                         {/* Enhanced Video Controls */}
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -440,11 +327,8 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                     <Button variant="outline" className="flex border-gray-300 items-center gap-2 px-6 py-3 hover:bg-blue-50 hover:border-blue-200">
                       <ArrowLeft size={16} /> Previous Lesson
                     </Button>
-                    <Button variant="outline" className="flex border-gray-300 items-center gap-2 px-6 py-3 hover:bg-purple-50 hover:border-purple-200">
-                      <MessageCircle size={16} /> Ask Question
-                    </Button>
                     <Button
-                      className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="flex items-center gap-2 bg-blue-500 text-white px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
                       onClick={() => currentItem && toggleCompletion(currentItem.id)}
                     >
                       Mark Complete <Check size={16} />
@@ -618,36 +502,10 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                     </CardContent>
                   </Card>
 
-                  {/* Enhanced Quick Actions */}
-                  <Card className="shadow-lg border-gray-300">
-                    <CardHeader className="pb-4">
-                      <CardTitle className="text-lg font-bold flex items-center">
-                        <Zap className="h-5 w-5 mr-2 text-indigo-600" />
-                        Quick Actions
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <Button variant="outline" className="w-full justify-start hover:bg-blue-50 hover:border-blue-200 transition-all duration-200" size="sm">
-                        <Download className="h-4 w-4 mr-2 text-blue-600" />
-                        Download Resources
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start hover:bg-green-50 hover:border-green-200 transition-all duration-200" size="sm">
-                        <MessageCircle className="h-4 w-4 mr-2 text-green-600" />
-                        Join Discussion
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start hover:bg-orange-50 hover:border-orange-200 transition-all duration-200" size="sm">
-                        <Bell className="h-4 w-4 mr-2 text-orange-600" />
-                        Set Reminder
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start hover:bg-purple-50 hover:border-purple-200 transition-all duration-200" size="sm">
-                        <Share className="h-4 w-4 mr-2 text-purple-600" />
-                        Share Progress
-                      </Button>
-                    </CardContent>
-                  </Card>
+     
 
                   {/* Study Tips */}
-                  <Card className="shadow-lg border-gray-300 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 border-2 dark:border-indigo-800">
+                  <Card className="shadow-lg border-gray-300 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 border-2 border-indigo-200 dark:border-indigo-800">
                     <CardHeader className="pb-4">
                       <CardTitle className="text-lg font-bold flex items-center text-indigo-700 dark:text-indigo-300">
                         💡 Study Tip
