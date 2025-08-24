@@ -9,7 +9,7 @@ import Link from "next/link"
 import { coursesData, Course } from "@/data/courses"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
-import { Eye, Search, BookOpen, Clock, Users, Star, Filter, X, ChevronDown } from "lucide-react"
+import { Eye, Search, BookOpen, Clock, Users,  Filter, X, ChevronDown } from "lucide-react"
 import AIChatIcon from "@/components/ai/page";
 
 // Helper function to determine course status
@@ -84,14 +84,14 @@ export default function CoursesPage() {
         <div className="flex flex-1 flex-col">
            <AIChatIcon />
           {/* Hero Section */}
-          <div className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-950 dark:to-indigo-950 border-b border-gray-200 dark:border-gray-800">
+          <div className="relative bg-gradient-to-r from-blue-100 to-blue-50 dark:from-gray-800 dark:to-gray-900 py-6  border-b border-gray-200 dark:border-gray-800">
             <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
             <div className="relative p-8">
               <div className="max-w-4xl">
-                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
                   Discover Your Learning Journey
                 </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                <p className=" text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
                   Explore our comprehensive collection of courses designed to help you master new skills and advance your career.
                 </p>
 
@@ -107,11 +107,7 @@ export default function CoursesPage() {
                     <span className="font-semibold">{levels.length}</span>
                     <span>Skill Levels</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Star className="h-4 w-4 text-yellow-500" />
-                    <span className="font-semibold">4.8</span>
-                    <span>Average Rating</span>
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -272,18 +268,18 @@ export default function CoursesPage() {
                     buttonConfig = { text: "Continue Learning", variant: "default" as const };
                   }
 
-                  return (
-                    <Card key={course.id} className="group relative overflow-hidden bg-white dark:bg-gray-900 border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-2xl">
+                  return ( 
+                    <Card key={course.id} className="group relative overflow-hidden bg-white dark:bg-gray-800 border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-2xl">
                       
                       {/* Progress Bar (for in-progress courses) */}
-                      {status === "In Progress" && (
+                      {/* {status === "In Progress" && (
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700">
                           <div
                             className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500"
                             style={{ width: `${progress}%` }}
                           />
                         </div>
-                      )}
+                      )} */}
 
                       <CardHeader className="pb-4">
                         <div className="flex justify-between items-start mb-3">

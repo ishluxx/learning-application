@@ -1,5 +1,3 @@
-"use client"
-
 import { AppSidebar } from "@/components/student/app-sidebar"
 import { SiteHeader } from "@/components/student/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
@@ -100,6 +98,7 @@ export default function Profile() {
                           className="absolute -right-2 -bottom-2 h-8 w-8 rounded-full"
                         >
                           <Pencil className="h-4 w-4" />
+                          
                         </Button>
                       </label>
                       <input
@@ -198,3 +197,4 @@ export default function Profile() {
     </SidebarProvider>
   )
 }
+
