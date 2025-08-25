@@ -1,9 +1,39 @@
+'use client'
 import { AppSidebar } from '@/components/student/app-sidebar'
 import { SiteHeader } from '@/components/student/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
-import React from 'react'
+import { useState } from 'react';
 
 export default function AiAssistant() {
+    const [question, setQuestion] = useState("");
+    const [answer, setAnswer] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!question.trim()) return;
+  
+    setIsLoading(true);
+    setAnswer("");
+    try {
+      const response = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: question }),
+      });
+  
+      const data = await response.json();
+      const aiResponse =
+        data.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "⚠️ No response from Gemini";
+      setAnswer(aiResponse);
+      setQuestion('')
+    } catch (error) {
+      console.error(error);
+      setAnswer("❌ Sorry, there was an error processing your request.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <SidebarProvider
       style={{
@@ -16,12 +46,24 @@ export default function AiAssistant() {
         <SiteHeader />
 <div className="h1r77 flex flex-col ox2cl ksbry d0l1a w-full mx-auto fglch xf1r4 ids43">
   {/* Heading */}
-  <div className="flex flex-col jkwm1 items-center hlt95 sm:flex-none">
+  <div className=" mt-10 flex flex-col jkwm1 items-center hlt95 sm:flex-none">
     <h1 className="w6mr2 a3jay dtief c9jt8 dark:text-neutral-200">
-      What can I help with?
+      AI Assistant
     </h1>
   </div>
   {/* End Heading */}
+    {/* Messages */}
+          <div className="flex-1 p-4 overflow-y-auto text-md space-y-3 rounded-md mt-3">
+            <div className=" text-gray-700 text-lg dark:text-gray-300 p-3 rounded-md select-text">
+              👋 Hi there! How can I assist you today?
+            </div>
+            {answer && (
+              <div className="text-gray-900 dark:text-gray-100 p-3 rounded-md whitespace-pre-wrap select-text">
+                {answer}
+              </div>
+            )}
+           
+          </div>
   {/* Body */}
   <div>
     {/* Textarea */}
@@ -34,8 +76,16 @@ export default function AiAssistant() {
           id="hs-pro-aimt"
           className="dkig0 ja90s oqskk sa2ld z47ts mi0xb block w-full w4poy azddh zsuop c9jt8 wl876 focus:outline-hidden k16qo vv6e0 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:text-neutral-200 dark:placeholder-neutral-500 overflow-y-auto xwpzv y0qzi qjpoo n3xnc dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
           placeholder="Ask anything..."
+          onChange={(e) => setQuestion(e.target.value)}
           data-hs-textarea-auto-height=""
-          defaultValue={""}
+          value={question}
+          disabled={isLoading}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              handleSubmit(e);
+            }
+          }}
         />
         <div className="kmove flex ox2cl items-center n6i5x">
           {/* Button Group */}
@@ -301,6 +351,7 @@ export default function AiAssistant() {
             {/* End Button */}
             {/* Send Button */}
             <button
+            onClick={handleSubmit}
               type="button"
               className="inline-flex e731n jkwm1 items-center yl1cu w4xo0 sikx1 pb094 kew0r dmaxi bnf6b disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden ukj8s"
             >
