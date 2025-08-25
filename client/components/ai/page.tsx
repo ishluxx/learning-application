@@ -89,7 +89,7 @@ export default function AIChatIcon() {
           <Bot size={28} />
         </button>
       ) : (
-       <Card className="w-[410px] min-h-[500px] max-h-[90vh] flex flex-col shadow-2xl rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1a1a] relative">
+       <Card className="lg:w-[410px] min-h-[500px] max-h-[90vh] flex flex-col shadow-2xl rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1a1a] relative">
 
           {/* Close Button */}
           <button

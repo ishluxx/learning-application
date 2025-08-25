@@ -6,7 +6,7 @@ Ai assistant  page functionality , and system settings functionality
 
 ## features
 - settings customization functionality
-- ai assistant backend funtionality with the clear respons
+- ai assistant backend funtionality with the clear response
 - nav-actions customization with the functionlity ahead with customization
  and the basic start up environment tools needed
 - chat bot functionality

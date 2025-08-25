@@ -22,4 +22,4 @@ on fri, 22august i added saved docs page and e-library page to allow students to
 on sun,august 24 i had replaced the DeepSeek API call with Google Gemini API and ensure chat bot works as expected on text prompt
 next step:is to make ai assistant page and all features on chatbot
 
-on mon,august 25 i re-integrated student page that was removed by someone 
+on mon,august 25 i re-integrated student page that was removed by someone and Implement AI Assistant functionality with question submission and response handling
