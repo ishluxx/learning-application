@@ -16,3 +16,5 @@ and i added proffesional chatbot
 
 on mon,18 i added notification page and achievement pages for student pages and i included chatbot in all pages for studeent
 
+on fri,august i added saved docs page and e-library page to allow students to download every book needed to gain skills
+

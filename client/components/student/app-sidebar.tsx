@@ -131,15 +131,20 @@ const data = {
   ],
   documents: [
     {
-      name: "Data Library",
-      url: "#",
+      name: "E-Library",
+      url: "/e-library",
+      icon: IconDatabase,
+    },
+    {
+      name: "Saved Docs",
+      url: "/saveddocs",
       icon: IconDatabase,
     },
     {
       name: "Reports",
       url: "#",
       icon: IconReport,
-    }
+    },
   ],
 }
 
