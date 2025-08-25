@@ -58,21 +58,27 @@ export default function AIChatIcon() {
     setAnswer("");
     try {
       // Replace with your API endpoint or mock response
-      const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer YOUR_API_KEY_HERE`,
-        },
-        body: JSON.stringify({
-          model: "deepseek/deepseek-r1-0528:free",
-          messages: [{ role: "user", content: question }],
-          stream: false,
-        }),
-      });
+      const response = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBSRXa9mMOmxdC5CYcSXnWZ_WOVjpMWwWk",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [{ text: question }],
+              },
+            ],
+          }),
+        }
+      );
 
       const data = await response.json();
-      const aiResponse = data.choices?.[0]?.message?.content || "No response received";
+      const aiResponse =
+        data.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "⚠️ No response from Gemini";
       setAnswer(aiResponse);
     } catch (error) {
       console.error(error);
