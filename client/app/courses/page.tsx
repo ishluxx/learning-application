@@ -270,17 +270,6 @@ export default function CoursesPage() {
 
                   return ( 
                     <Card key={course.id} className="group relative overflow-hidden bg-white dark:bg-gray-800 border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-2xl">
-                      
-                      {/* Progress Bar (for in-progress courses) */}
-                      {/* {status === "In Progress" && (
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700">
-                          <div
-                            className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500"
-                            style={{ width: `${progress}%` }}
-                          />
-                        </div>
-                      )} */}
-
                       <CardHeader className="pb-4">
                         <div className="flex justify-between items-start mb-3">
                           <CardTitle className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight line-clamp-2">
