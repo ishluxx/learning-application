@@ -53,26 +53,20 @@ export default function AIChatIcon() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!question.trim()) return;
-
+  
     setIsLoading(true);
     setAnswer("");
     try {
-      // Replace with your API endpoint or mock response
-      const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+      const response = await fetch("/api/gemini", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer YOUR_API_KEY_HERE`,
-        },
-        body: JSON.stringify({
-          model: "deepseek/deepseek-r1-0528:free",
-          messages: [{ role: "user", content: question }],
-          stream: false,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: question }),
       });
-
+  
       const data = await response.json();
-      const aiResponse = data.choices?.[0]?.message?.content || "No response received";
+      const aiResponse =
+        data.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "⚠️ No response from Gemini";
       setAnswer(aiResponse);
     } catch (error) {
       console.error(error);
@@ -81,6 +75,7 @@ export default function AIChatIcon() {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="fixed bottom-4 right-4 z-50 font-sans">
@@ -94,7 +89,8 @@ export default function AIChatIcon() {
           <Bot size={28} />
         </button>
       ) : (
-        <Card className="w-[360px] h-[500px] flex flex-col shadow-2xl rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1a1a] relative">
+       <Card className="lg:w-[410px] min-h-[500px] max-h-[90vh] flex flex-col shadow-2xl rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1a1a] relative">
+
           {/* Close Button */}
           <button
             onClick={() => {
@@ -131,7 +127,7 @@ export default function AIChatIcon() {
 
           {/* Messages */}
           <div className="flex-1 p-4 overflow-y-auto text-sm space-y-3 bg-gray-50 dark:bg-[#121212] rounded-md mt-3">
-            <div className="text-gray-700 dark:text-gray-300 bg-white dark:bg-[#222222] p-3 rounded-md select-text">
+            <div className=" text-gray-700 dark:text-gray-300 bg-white dark:bg-[#222222] p-3 rounded-md select-text">
               👋 Hi there! How can I assist you today?
             </div>
             {answer && (

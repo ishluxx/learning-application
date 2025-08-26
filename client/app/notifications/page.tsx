@@ -4,11 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import NotificationCard from "@/components/notification/NotificationCard";
 import NotificationFilter from "@/components/notification/NotificationFilter";
 import NotificationSkeleton from "@/components/notification/NotificationSkeleton";
-import { FiBell, FiCheck } from "react-icons/fi";
 import { AppSidebar } from "@/components/student/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { SiteHeader } from "@/components/student/site-header";
 import AIChatIcon from "@/components/ai/page";
+import { Bell, Check } from "lucide-react";
 
 
 type Notification = {
@@ -159,13 +159,13 @@ export default function NotificationsPage() {
                             className="flex justify-between items-center mb-8"
                         >
                             <h1 className="text-2xl font-bold flex items-center gap-2">
-                                <FiBell /> Notifications
+                                <Bell /> Notifications
                             </h1>
                             <button
                                 onClick={markAllAsRead}
                                 className="flex items-center gap-1 text-sm "
                             >
-                                <FiCheck /> Mark all as read
+                                <Check /> Mark all as read
                             </button>
                         </motion.div>
 

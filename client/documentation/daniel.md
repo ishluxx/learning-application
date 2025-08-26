@@ -16,5 +16,10 @@ and i added proffesional chatbot
 
 on mon,18 i added notification page and achievement pages for student pages and i included chatbot in all pages for studeent
 
-on fri,august i added saved docs page and e-library page to allow students to download every book needed to gain skills
+on fri, 22august i added saved docs page and e-library page to allow students to download every book needed to gain skills
 
+
+on sun,august 24 i had replaced the DeepSeek API call with Google Gemini API and ensure chat bot works as expected on text prompt
+next step:is to make ai assistant page and all features on chatbot
+
+on mon,august 25 i re-integrated student page that was removed by someone and Implement AI Assistant functionality with question submission and response handling

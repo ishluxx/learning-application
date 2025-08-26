@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import { FiX, FiCheckCircle, FiAlertTriangle, FiAward } from "react-icons/fi";
-
+import { AwardIcon, CheckIcon, TriangleRight } from "lucide-react";
 type NotificationType = "message" | "deadline" | "achievement";
 
 interface NotificationCardProps {
@@ -14,9 +13,9 @@ interface NotificationCardProps {
 }
 
 const icons = {
-  message: <FiCheckCircle />,
-  deadline: <FiAlertTriangle />,
-  achievement: <FiAward />,
+  message: <CheckIcon />,
+  deadline: <TriangleRight />,
+  achievement: <AwardIcon />,
 };
 
 export default function NotificationCard({
@@ -41,7 +40,7 @@ export default function NotificationCard({
         onClick={() => onDismiss(id)}
         className="absolute top-2 right-2"
       >
-        <FiX />
+        X
       </button>
 
       <div className="flex items-start gap-3">
