@@ -136,7 +136,7 @@ const data = {
       icon: IconDatabase,
     },
     {
-      name: "Saved Docs",
+      name: "Saved Notes",
       url: "/saveddocs",
       icon: IconDatabase,
     },
