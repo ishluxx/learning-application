@@ -23,3 +23,5 @@ on sun,august 24 i had replaced the DeepSeek API call with Google Gemini API and
 next step:is to make ai assistant page and all features on chatbot
 
 on mon,august 25 i re-integrated student page that was removed by someone and Implement AI Assistant functionality with question submission and response handling
+
+on wed,august 25 i had refined nav actions and created pages required to ensure functionality of those nav actions
