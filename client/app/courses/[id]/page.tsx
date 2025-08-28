@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, use } from "react"
-import { ChevronDown, ChevronRight, Check, ArrowLeft, Play, Pause, Volume2, Maximize, Settings, Eye, Clock, Users, Star, Award, Target, BookOpen, Trophy, Zap, Menu, X } from "lucide-react"
+import { ChevronDown, ChevronRight, Check, ArrowLeft, Play, Pause, Eye, Clock, Users, Star, Award, Target, BookOpen, Trophy, Zap, Menu, X, Lock, CheckCircle } from "lucide-react"
 import { AppSidebar } from "@/components/student/app-sidebar"
 import { SiteHeader } from "@/components/student/site-header"
 import { Button } from "@/components/ui/button"
@@ -9,9 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import Image from "next/image"
 import { cn } from "@/lib/utils"
-import { coursesData, Course, CourseItem, CourseSection } from "@/data/courses"
+import { coursesData, Course, CourseItem, CourseSection, updateCourseProgress, setActiveLesson, getNextLesson, getPreviousLesson, updateLessonLocks, canAccessLesson, isExamUnlocked } from "@/data/courses"
+import { generateLearningObjectives, generatePrerequisites } from "@/data/courses"
 
 export default function CourseLearningPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
   const params = use(paramsPromise)
@@ -21,6 +21,10 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
   const [currentTime, setCurrentTime] = useState(342) // 6:42 in seconds
   const [duration] = useState(1080) // 18:00 in seconds
   const [showMobileSidebar, setShowMobileSidebar] = useState(false)
+  const [showExam, setShowExam] = useState(false)
+  const [examAnswers, setExamAnswers] = useState<Record<string, number>>({})
+  const [examSubmitted, setExamSubmitted] = useState(false)
+  const [examScore, setExamScore] = useState<number | null>(null)
 
   const currentItem: CourseItem | null = sections
     .flatMap(section => section.items)
@@ -39,10 +43,13 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
     )
   }
 
-  // Calculate progress and statistics from actual data
+  // Calculate progress and statistics from actual data including exam
   const totalLessons = sections.flatMap(section => section.items).length || 0
   const completedLessons = sections.flatMap(section => section.items).filter(item => item.completed).length || 0
-  const courseProgress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0
+  const examCompleted = course?.finalExam?.completed ? 1 : 0
+  const totalItems = totalLessons + (course?.finalExam ? 1 : 0)
+  const completedItems = completedLessons + examCompleted
+  const courseProgress = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0
 
   // Get current lesson position
   const allItems = sections.flatMap(section => section.items)
@@ -52,6 +59,10 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
   // Navigation helpers
   const previousItem = currentItemIndex > 0 ? allItems[currentItemIndex - 1] : null
   const nextItem = currentItemIndex < allItems.length - 1 ? allItems[currentItemIndex + 1] : null
+  
+  // Check if next lesson is accessible
+  const canGoToNext = nextItem ? canAccessLesson(course?.id || '', nextItem.id) : false
+  const examUnlocked = course ? isExamUnlocked(course.id) : false
 
   const toggleSection = (sectionId: string) => {
     setSections(
@@ -64,34 +75,120 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
   }
 
   const toggleCompletion = (itemId: string) => {
-    setSections(
-      sections.map(section => ({
-        ...section,
-        items: section.items.map(item =>
-          item.id === itemId
-            ? { ...item, completed: !item.completed }
-            : item
-        ),
-      }))
-    )
+    const item = sections.flatMap(s => s.items).find(i => i.id === itemId)
+    if (item && course) {
+      const newCompleted = !item.completed
+      updateCourseProgress(course.id, itemId, newCompleted)
+      
+      // Update lesson locks after completion change
+      updateLessonLocks(course.id)
+      
+      // Update local state
+      setSections(
+        sections.map(section => ({
+          ...section,
+          items: section.items.map(item =>
+            item.id === itemId
+              ? { ...item, completed: newCompleted }
+              : item
+          ),
+        }))
+      )
+
+      // Auto-navigate to next lesson if completed and unlocked
+      if (newCompleted) {
+        const nextLesson = getNextLesson(course.id, itemId)
+        if (nextLesson && canAccessLesson(course.id, nextLesson.id)) {
+          setTimeout(() => {
+            navigateToItem(nextLesson)
+          }, 1000) // Small delay for better UX
+        }
+      }
+    }
   }
 
   const setActiveItem = (itemId: string) => {
-    setSections(
-      sections.map(section => ({
-        ...section,
-        items: section.items.map(item => ({
-          ...item,
-          isActive: item.id === itemId,
-        })),
-      }))
-    )
-    // Close mobile sidebar when selecting an item
-    setShowMobileSidebar(false)
+    if (course) {
+      // Check if lesson is accessible before setting as active
+      if (!canAccessLesson(course.id, itemId)) {
+        return // Don't allow access to locked lessons
+      }
+      
+      setActiveLesson(course.id, itemId)
+      
+      // Update local state
+      setSections(
+        sections.map(section => ({
+          ...section,
+          items: section.items.map(item => ({
+            ...item,
+            isActive: item.id === itemId,
+          })),
+        }))
+      )
+      // Close mobile sidebar when selecting an item
+      setShowMobileSidebar(false)
+      // Hide exam if switching to a lesson
+      setShowExam(false)
+    }
   }
 
   const navigateToItem = (item: CourseItem) => {
     setActiveItem(item.id)
+  }
+
+  const goToNextLesson = () => {
+    if (course && currentItem) {
+      const nextLesson = getNextLesson(course.id, currentItem.id)
+      if (nextLesson && canAccessLesson(course.id, nextLesson.id)) {
+        navigateToItem(nextLesson)
+      }
+    }
+  }
+
+  const goToPreviousLesson = () => {
+    if (course && currentItem) {
+      const prevLesson = getPreviousLesson(course.id, currentItem.id)
+      if (prevLesson) {
+        navigateToItem(prevLesson)
+      }
+    }
+  }
+
+  const startExam = () => {
+    if (course && isExamUnlocked(course.id)) {
+      setShowExam(true)
+      setExamAnswers({})
+      setExamSubmitted(false)
+      setExamScore(null)
+    }
+  }
+
+  const submitExam = () => {
+    if (!course?.finalExam) return
+    
+    let correctAnswers = 0
+    course.finalExam.questions.forEach(question => {
+      if (examAnswers[question.id] === question.correctAnswer) {
+        correctAnswers++
+      }
+    })
+    
+    const score = Math.round((correctAnswers / course.finalExam.questions.length) * 100)
+    setExamScore(score)
+    setExamSubmitted(true)
+    
+    // Mark exam as completed if passed
+    if (score >= course.finalExam.passingScore) {
+      course.finalExam.completed = true
+    }
+  }
+
+  const handleAnswerChange = (questionId: string, answerIndex: number) => {
+    setExamAnswers(prev => ({
+      ...prev,
+      [questionId]: answerIndex
+    }))
   }
 
   const formatTime = (seconds: number) => {
@@ -102,41 +199,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
 
   const progressPercentage = (currentTime / duration) * 100
 
-  // Generate dynamic learning objectives based on course content
-  const generateLearningObjectives = (course: Course) => {
-    const baseObjectives = [
-      `Master ${course.title} fundamentals`,
-      `Apply ${course.level.toLowerCase()} level concepts`,
-      `Build practical skills in ${course.duration}`,
-      `Complete hands-on projects and exercises`
-    ]
-    return baseObjectives
-  }
 
-  // Generate prerequisites based on course level and title
-  const generatePrerequisites = (course: Course) => {
-    const levelPrereqs = {
-      'Beginner': [
-        'Basic computer skills',
-        'Text editor familiarity',
-        'Willingness to learn',
-        'Internet connection'
-      ],
-      'Intermediate': [
-        'Programming fundamentals',
-        'Development environment setup',
-        'Version control basics',
-        'Problem-solving skills'
-      ],
-      'Advanced': [
-        'Solid programming foundation',
-        'Industry experience preferred',
-        'Complex problem-solving skills',
-        'Advanced tooling knowledge'
-      ]
-    }
-    return levelPrereqs[course.level as keyof typeof levelPrereqs] || levelPrereqs['Beginner']
-  }
 
   // Calculate study statistics
   const studyStats = {
@@ -241,158 +304,236 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                     </div>
                   </div>
 
-                  {/* Enhanced Video Player */}
-                  <Card className="overflow-hidden shadow-2xl border-0 group">
-                    <CardContent className="p-0">
-                      <div className="relative aspect-video w-full flex items-center justify-center bg-gray-900">
-                        <Button
-                          size="lg"
-                          className="relative z-10 w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full bg-white/15 hover:bg-white/25 border-2 border-white/30 backdrop-blur-md transition-all duration-300 hover:scale-110 shadow-2xl"
-                          onClick={() => setIsPlaying(!isPlaying)}
-                        >
-                          {isPlaying ? (
-                            <Pause className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 text-white drop-shadow-lg" />
+                  {/* Course Video - Show only at the beginning of first lesson */}
+                  {course?.video && currentItem?.id === sections[0]?.items[0]?.id && (
+                    <Card className="overflow-hidden shadow-2xl border-0 group mb-6">
+                      <CardContent className="p-0">
+                        <div className="relative aspect-video w-full flex items-center justify-center bg-gray-900">
+                          {course.video.includes('youtube.com') || course.video.includes('youtu.be') ? (
+                            <iframe
+                              src={course.video}
+                              className="w-full h-full"
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            />
                           ) : (
-                            <Play className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 text-white ml-1 drop-shadow-lg" />
+                            <video
+                              src={course.video}
+                              controls
+                              className="w-full h-full"
+                              poster="/api/placeholder/800/450"
+                            />
                           )}
-                        </Button>
-
-                        {/* Enhanced Video Controls */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 sm:p-4 lg:p-6 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          {/* Progress Bar */}
-                          <div className="mb-3 sm:mb-4 lg:mb-6">
-                            <div className="w-full bg-white/20 rounded-full h-1.5 sm:h-2 cursor-pointer hover:h-2 sm:hover:h-3 transition-all duration-200">
-                              <div
-                                className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 h-full rounded-full transition-all duration-300 relative"
-                                style={{ width: `${progressPercentage}%` }}
-                              >
-                                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-full shadow-lg opacity-0 hover:opacity-100 transition-opacity"></div>
+                          <Button
+                            size="lg"
+                            className="absolute z-10 w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full bg-white/15 hover:bg-white/25 border-2 border-white/30 backdrop-blur-md transition-all duration-300 hover:scale-110 shadow-2xl"
+                            onClick={() => setIsPlaying(!isPlaying)}
+                          >
+                            {isPlaying ? (
+                              <Pause className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 text-white drop-shadow-lg" />
+                            ) : (
+                              <Play className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 text-white ml-1 drop-shadow-lg" />
+                            )}
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+ {/* Enhanced Learning Content Grid */}
+                  {currentItem?.id === sections[0]?.items[0]?.id && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+                      <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-gray-300 dark:from-blue-950/20 dark:to-cyan-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                        <CardHeader className="pb-3 sm:pb-4">
+                          <CardTitle className="text-lg sm:text-xl flex items-center text-blue-700 dark:text-blue-300 font-bold">
+                            🎯 Learning Objectives
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3 sm:space-y-4">
+                          {generateLearningObjectives(course).map((objective, index) => (
+                            <div key={index} className="flex items-start space-x-3 sm:space-x-4">
+                              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mt-0.5 shadow-md flex-shrink-0">
+                                <span className="text-white text-xs sm:text-sm font-bold">{index + 1}</span>
                               </div>
+                              <span className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 font-medium leading-relaxed">{objective}</span>
                             </div>
-                          </div>
+                          ))}
+                        </CardContent>
+                      </Card>
 
-                          {/* Enhanced Control Buttons */}
-                          <div className="flex items-center justify-between text-white">
-                            <div className="flex items-center space-x-2 sm:space-x-4 lg:space-x-6">
-                              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 p-2 sm:p-3 rounded-full">
-                                {isPlaying ? <Pause className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5" /> : <Play className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5" />}
-                              </Button>
-                              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 p-2 sm:p-3 rounded-full">
-                                <Volume2 className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5" />
-                              </Button>
-                              <span className="text-xs sm:text-sm font-medium bg-black/30 px-2 py-1 sm:px-3 rounded-full backdrop-blur-sm">
-                                {formatTime(currentTime)} / {formatTime(duration)}
-                              </span>
+                      <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-gray-300 dark:from-purple-950/20 dark:to-pink-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                        <CardHeader className="pb-3 sm:pb-4">
+                          <CardTitle className="text-lg sm:text-xl flex items-center text-purple-700 dark:text-purple-300 font-bold">
+                            📋 Prerequisites
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3 sm:space-y-4">
+                          {generatePrerequisites(course).map((prereq, index) => (
+                            <div key={index} className="flex items-start space-x-3 sm:space-x-4">
+                              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-600 rounded-full flex items-center justify-center mt-0.5 shadow-md flex-shrink-0">
+                                <Check className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                              </div>
+                              <span className="text-xs sm:text-sm text-purple-700 dark:text-purple-300 font-medium leading-relaxed">{prereq}</span>
                             </div>
-                            <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
-                              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 p-2 sm:p-3 rounded-full">
-                                <Settings className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5" />
-                              </Button>
-                              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 p-2 sm:p-3 rounded-full">
-                                <Maximize className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5" />
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Enhanced Learning Content Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-                    <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-gray-300 dark:from-blue-950/20 dark:to-cyan-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <CardHeader className="pb-3 sm:pb-4">
-                        <CardTitle className="text-lg sm:text-xl flex items-center text-blue-700 dark:text-blue-300 font-bold">
-                          🎯 Learning Objectives
+                          ))}
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
+                  {/* Final Exam Interface */}
+                  {showExam && course?.finalExam && (
+                    <Card className="shadow-2xl border-0 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20 rounded-2xl">
+                      <CardHeader className="pb-6">
+                        <CardTitle className="text-2xl font-bold flex items-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                          <Trophy className="h-8 w-8 mr-3 text-purple-500" />
+                          {course.finalExam.title}
                         </CardTitle>
+                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                          <Badge className="bg-purple-100 text-purple-800 px-3 py-1">
+                            {course.finalExam.questions.length} Questions
+                          </Badge>
+                          <Badge className="bg-indigo-100 text-indigo-800 px-3 py-1">
+                            Passing Score: {course.finalExam.passingScore}%
+                          </Badge>
+                        </div>
                       </CardHeader>
-                      <CardContent className="space-y-3 sm:space-y-4">
-                        {generateLearningObjectives(course).map((objective, index) => (
-                          <div key={index} className="flex items-start space-x-3 sm:space-x-4">
-                            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mt-0.5 shadow-md flex-shrink-0">
-                              <span className="text-white text-xs sm:text-sm font-bold">{index + 1}</span>
+                      <CardContent className="space-y-6">
+                        {!examSubmitted ? (
+                          <>
+                            {course.finalExam.questions.map((question, index) => (
+                              <div key={question.id} className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
+                                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+                                  {index + 1}. {question.question}
+                                </h3>
+                                <div className="space-y-3">
+                                  {question.options.map((option, optionIndex) => (
+                                    <label
+                                      key={optionIndex}
+                                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                                    >
+                                      <input
+                                        type="radio"
+                                        name={question.id}
+                                        value={optionIndex}
+                                        checked={examAnswers[question.id] === optionIndex}
+                                        onChange={() => handleAnswerChange(question.id, optionIndex)}
+                                        className="w-4 h-4 text-purple-600 focus:ring-purple-500"
+                                      />
+                                      <span className="text-gray-700 dark:text-gray-300">{option}</span>
+                                    </label>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                            <div className="flex justify-between items-center pt-6">
+                              <Button
+                                variant="outline"
+                                onClick={() => setShowExam(false)}
+                                className="px-6 py-3"
+                              >
+                                Cancel
+                              </Button>
+                              <Button
+                                onClick={submitExam}
+                                disabled={Object.keys(examAnswers).length !== course.finalExam.questions.length}
+                                className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 shadow-lg"
+                              >
+                                Submit Exam
+                              </Button>
                             </div>
-                            <span className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 font-medium leading-relaxed">{objective}</span>
+                          </>
+                        ) : (
+                          <div className="text-center py-8">
+                            <div className={cn(
+                              "w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-6",
+                              examScore! >= course.finalExam.passingScore
+                                ? "bg-green-100 text-green-600"
+                                : "bg-red-100 text-red-600"
+                            )}>
+                              {examScore! >= course.finalExam.passingScore ? (
+                                <CheckCircle className="h-12 w-12" />
+                              ) : (
+                                <X className="h-12 w-12" />
+                              )}
+                            </div>
+                            <h3 className="text-2xl font-bold mb-2">
+                              {examScore! >= course.finalExam.passingScore ? "Congratulations!" : "Keep Learning!"}
+                            </h3>
+                            <p className="text-lg text-gray-600 dark:text-gray-400 mb-4">
+                              Your Score: <span className="font-bold text-2xl">{examScore}%</span>
+                            </p>
+                            <p className="text-gray-600 dark:text-gray-400 mb-6">
+                              {examScore! >= course.finalExam.passingScore
+                                ? "You've successfully completed the course!"
+                                : `You need ${course.finalExam.passingScore}% to pass. Review the lessons and try again.`}
+                            </p>
+                            <div className="space-y-4">
+                              {course.finalExam.questions.map((question, index) => (
+                                <div key={question.id} className="text-left p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                  <p className="font-medium mb-2">{index + 1}. {question.question}</p>
+                                  <p className={cn(
+                                    "text-sm",
+                                    examAnswers[question.id] === question.correctAnswer
+                                      ? "text-green-600 dark:text-green-400"
+                                      : "text-red-600 dark:text-red-400"
+                                  )}>
+                                    Your answer: {question.options[examAnswers[question.id]]}
+                                    {examAnswers[question.id] !== question.correctAnswer && (
+                                      <span className="block text-green-600 dark:text-green-400">
+                                        Correct: {question.options[question.correctAnswer]}
+                                      </span>
+                                    )}
+                                  </p>
+                                  {question.explanation && (
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                                      {question.explanation}
+                                    </p>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                            <Button
+                              onClick={() => setShowExam(false)}
+                              className="mt-6 px-8 py-3"
+                            >
+                              Back to Course
+                            </Button>
                           </div>
-                        ))}
+                        )}
                       </CardContent>
                     </Card>
+                  )}
 
-                    <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-gray-300 dark:from-purple-950/20 dark:to-pink-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <CardHeader className="pb-3 sm:pb-4">
-                        <CardTitle className="text-lg sm:text-xl flex items-center text-purple-700 dark:text-purple-300 font-bold">
-                          📋 Prerequisites
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-3 sm:space-y-4">
-                        {generatePrerequisites(course).map((prereq, index) => (
-                          <div key={index} className="flex items-start space-x-3 sm:space-x-4">
-                            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-600 rounded-full flex items-center justify-center mt-0.5 shadow-md flex-shrink-0">
-                              <Check className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
-                            </div>
-                            <span className="text-xs sm:text-sm text-purple-700 dark:text-purple-300 font-medium leading-relaxed">{prereq}</span>
-                          </div>
-                        ))}
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  {/* Enhanced Interactive Transcript */}
-                  <Card className="shadow-lg border-gray-300 hover:shadow-xl transition-all duration-300">
-                    <CardHeader className="pb-3 sm:pb-4">
-                      <CardTitle className="text-lg sm:text-xl flex items-center font-bold">
-                        📝 Interactive Transcript
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3 sm:space-y-4">
-                      <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm">
-                        <div className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border-l-4 border-blue-500 hover:shadow-md transition-all duration-200">
-                          <span className="text-blue-600 font-mono text-xs bg-blue-100 dark:bg-blue-900 px-2 py-1 sm:px-3 sm:py-2 rounded-full font-bold flex-shrink-0">00:03</span>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                            Welcome to {course.title}! In this {course.level.toLowerCase()} level course, we&apos;ll explore fundamental concepts over {course.duration}.
-                          </p>
-                        </div>
-                        <div className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer border border-transparent hover:border-gray-200 transition-all duration-200">
-                          <span className="text-gray-500 font-mono text-xs bg-gray-100 dark:bg-gray-800 px-2 py-1 sm:px-3 sm:py-2 rounded-full font-bold flex-shrink-0">01:35</span>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                            {course.instructor} will guide you through practical examples and real-world applications.
-                          </p>
-                        </div>
-                        <div className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer border border-transparent hover:border-gray-200 transition-all duration-200">
-                          <span className="text-gray-500 font-mono text-xs bg-gray-100 dark:bg-gray-800 px-2 py-1 sm:px-3 sm:py-2 rounded-full font-bold flex-shrink-0">03:18</span>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                            {course.description} Let&apos;s dive into the practical techniques and best practices.
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Enhanced Lesson Content */}
-                  {currentItem?.content && (
-                    <Card className="shadow-lg border-gray-300 hover:shadow-xl transition-all duration-300">
-                      <CardHeader className="pb-3 sm:pb-4">
-                        <CardTitle className="text-lg sm:text-xl flex items-center font-bold">
-                          📚 Lesson Content
+                  {/* Lesson Content Card - Always show content from courses.ts */}
+                  {!showExam && (
+                    <Card className="shadow-xl border-0 hover:shadow-2xl transition-all duration-500 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl">
+                      <CardHeader className="pb-4">
+                        <CardTitle className="text-xl sm:text-2xl font-bold flex items-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                          <BookOpen className="h-6 w-6 mr-3 text-blue-500" />
+                          {currentItem?.title}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="prose dark:prose-invert max-w-none prose-sm sm:prose-base">
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line text-sm sm:text-base">
-                            {currentItem.content}
+                        <div className="prose dark:prose-invert max-w-none prose-lg">
+                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-line">
+                            {currentItem?.content || `Welcome to ${course.title}! Let's begin your learning journey with this comprehensive introduction.`}
                           </p>
                         </div>
                       </CardContent>
                     </Card>
                   )}
 
+                  
+
+
+
                   {/* Enhanced Navigation */}
                   <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
                     <Button
                       variant="outline"
                       className="w-full sm:w-auto flex border-gray-300 items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 hover:bg-blue-50 hover:border-blue-200 text-sm"
-                      onClick={() => previousItem && navigateToItem(previousItem)}
-                      disabled={!previousItem}
+                      onClick={goToPreviousLesson}
+                      disabled={!course || !currentItem || !getPreviousLesson(course.id, currentItem.id)}
                     >
                       <ArrowLeft size={14} /> Previous Lesson
                     </Button>
@@ -401,15 +542,55 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                         className="w-full sm:w-auto flex items-center gap-2 bg-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-300 text-sm"
                         onClick={() => currentItem && toggleCompletion(currentItem.id)}
                       >
-                        {currentItem?.completed ? 'Mark Incomplete' : 'Mark Complete'} <Check size={14} />
+                        {currentItem?.completed ? (
+                          <>
+                            <Check size={14} className="text-green-300" />
+                            Mark Incomplete
+                          </>
+                        ) : (
+                          <>
+                            Mark Complete
+                            <Check size={14} />
+                          </>
+                        )}
                       </Button>
-                      <Button
-                        className="w-full sm:w-auto flex items-center gap-2 bg-green-500 text-white px-4 sm:px-6 py-2 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-300 text-sm"
-                        onClick={() => nextItem && navigateToItem(nextItem)}
-                        disabled={!nextItem}
-                      >
-                        Next Lesson <ChevronRight size={14} />
-                      </Button>
+                      {nextItem ? (
+                        <Button
+                          className={cn(
+                            "w-full sm:w-auto flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-300 text-sm",
+                            canGoToNext 
+                              ? "bg-green-500 text-white hover:bg-green-600" 
+                              : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                          )}
+                          onClick={goToNextLesson}
+                          disabled={!canGoToNext}
+                        >
+                          {canGoToNext ? (
+                            <>Next Lesson <ChevronRight size={14} /></>
+                          ) : (
+                            <>
+                              <Lock size={14} />
+                              Complete Current Lesson
+                            </>
+                          )}
+                        </Button>
+                      ) : examUnlocked ? (
+                        <Button
+                          className="w-full sm:w-auto flex items-center gap-2 bg-purple-500 text-white px-4 sm:px-6 py-2 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-300 text-sm"
+                          onClick={startExam}
+                        >
+                          <Trophy size={14} />
+                          Take Final Exam
+                        </Button>
+                      ) : (
+                        <Button
+                          className="w-full sm:w-auto flex items-center gap-2 bg-gray-400 text-gray-200 px-4 sm:px-6 py-2 sm:py-3 shadow-lg cursor-not-allowed text-sm"
+                          disabled
+                        >
+                          <Lock size={14} />
+                          Complete All Lessons
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -438,7 +619,12 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                           />
                         </div>
                         <p className="text-sm text-gray-600 mt-3 font-medium">
-                          {completedLessons} of {totalLessons} lessons completed
+                          {completedItems} of {totalItems} items completed
+                          {course?.finalExam && (
+                            <span className="block text-xs text-gray-500 mt-1">
+                              ({completedLessons}/{totalLessons} lessons + {examCompleted}/1 exam)
+                            </span>
+                          )}
                         </p>
                       </div>
                     </CardContent>
@@ -474,45 +660,107 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
 
                           {section.isOpen && (
                             <div className="ml-4 space-y-1">
-                              {section.items.map((item, itemIndex) => (
-                                <button
-                                  key={item.id}
-                                  onClick={() => setActiveItem(item.id)}
-                                  className={cn(
-                                    "w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-all duration-200",
-                                    item.isActive
-                                      ? "bg-blue-50 border border-blue-200 dark:bg-blue-950/20"
-                                      : "hover:bg-gray-50 dark:hover:bg-gray-700",
-                                    item.completed && "bg-green-50 dark:bg-green-950/20"
-                                  )}
-                                >
-                                  <div className={cn(
-                                    "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
-                                    item.completed
-                                      ? "bg-green-500 text-white"
-                                      : item.isActive
-                                        ? "bg-blue-500 text-white"
-                                        : "bg-gray-200 text-gray-600"
-                                  )}>
-                                    {item.completed ? (
-                                      <Check className="h-3 w-3" />
-                                    ) : (
-                                      itemIndex + 1
+                              {section.items.map((item, itemIndex) => {
+                                const isLocked = course ? !canAccessLesson(course.id, item.id) : false;
+                                return (
+                                  <button
+                                    key={item.id}
+                                    onClick={() => setActiveItem(item.id)}
+                                    disabled={isLocked}
+                                    className={cn(
+                                      "w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-all duration-200",
+                                      item.isActive
+                                        ? "bg-blue-50 border border-blue-200 dark:bg-blue-950/20"
+                                        : isLocked
+                                          ? "opacity-50 cursor-not-allowed"
+                                          : "hover:bg-gray-50 dark:hover:bg-gray-700",
+                                      item.completed && "bg-green-50 dark:bg-green-950/20"
                                     )}
-                                  </div>
-                                  <span className={cn(
-                                    "text-sm",
-                                    item.isActive && "font-medium text-blue-700 dark:text-blue-300",
-                                    item.completed && "text-green-700 dark:text-green-300"
-                                  )}>
-                                    {item.title}
-                                  </span>
-                                </button>
-                              ))}
+                                  >
+                                    <div className={cn(
+                                      "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
+                                      item.completed
+                                        ? "bg-green-500 text-white"
+                                        : item.isActive
+                                          ? "bg-blue-500 text-white"
+                                          : isLocked
+                                            ? "bg-gray-300 text-gray-500"
+                                            : "bg-gray-200 text-gray-600"
+                                    )}>
+                                      {item.completed ? (
+                                        <Check className="h-3 w-3" />
+                                      ) : isLocked ? (
+                                        <Lock className="h-3 w-3" />
+                                      ) : (
+                                        itemIndex + 1
+                                      )}
+                                    </div>
+                                    <span className={cn(
+                                      "text-sm",
+                                      item.isActive && "font-medium text-blue-700 dark:text-blue-300",
+                                      item.completed && "text-green-700 dark:text-green-300",
+                                      isLocked && "text-gray-400"
+                                    )}>
+                                      {item.title}
+                                    </span>
+                                  </button>
+                                );
+                              })}
                             </div>
                           )}
                         </div>
                       ))}
+                      
+                      {/* Final Exam Section */}
+                      {course?.finalExam && (
+                        <div className="space-y-2 pt-4 border-t border-gray-200 dark:border-gray-600">
+                          <button
+                            onClick={startExam}
+                            disabled={!examUnlocked}
+                            className={cn(
+                              "w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-all duration-200",
+                              showExam
+                                ? "bg-purple-50 border border-purple-200 dark:bg-purple-950/20"
+                                : examUnlocked
+                                  ? "hover:bg-gray-50 dark:hover:bg-gray-700"
+                                  : "opacity-50 cursor-not-allowed",
+                              course.finalExam.completed && "bg-green-50 dark:bg-green-950/20"
+                            )}
+                          >
+                            <div className={cn(
+                              "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
+                              course.finalExam.completed
+                                ? "bg-green-500 text-white"
+                                : showExam
+                                  ? "bg-purple-500 text-white"
+                                  : examUnlocked
+                                    ? "bg-purple-200 text-purple-700"
+                                    : "bg-gray-300 text-gray-500"
+                            )}>
+                              {course.finalExam.completed ? (
+                                <Check className="h-3 w-3" />
+                              ) : !examUnlocked ? (
+                                <Lock className="h-3 w-3" />
+                              ) : (
+                                <Trophy className="h-3 w-3" />
+                              )}
+                            </div>
+                            <span className={cn(
+                              "text-sm font-medium",
+                              showExam && "text-purple-700 dark:text-purple-300",
+                              course.finalExam.completed && "text-green-700 dark:text-green-300",
+                              !examUnlocked && "text-gray-400"
+                            )}>
+                              Final Exam
+                            </span>
+                            {!examUnlocked && (
+                              <Badge className="ml-auto bg-gray-200 text-gray-600 text-xs">
+                                Locked
+                              </Badge>
+                            )}
+                          </button>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
 
@@ -623,7 +871,12 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                           />
                         </div>
                         <p className="text-xs text-gray-600 mt-2 font-medium">
-                          {completedLessons} of {totalLessons} completed
+                          {completedItems} of {totalItems} completed
+                          {course?.finalExam && (
+                            <span className="block text-xs text-gray-500 mt-1">
+                              ({completedLessons}/{totalLessons} lessons + {examCompleted}/1 exam)
+                            </span>
+                          )}
                         </p>
                       </div>
                     </CardContent>
@@ -659,45 +912,107 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
 
                           {section.isOpen && (
                             <div className="ml-3 space-y-1">
-                              {section.items.map((item, itemIndex) => (
-                                <button
-                                  key={item.id}
-                                  onClick={() => setActiveItem(item.id)}
-                                  className={cn(
-                                    "w-full flex items-center space-x-2 p-2 rounded-lg text-left transition-all duration-200",
-                                    item.isActive
-                                      ? "bg-blue-50 border border-blue-200 dark:bg-blue-950/20"
-                                      : "hover:bg-gray-50 dark:hover:bg-gray-700",
-                                    item.completed && "bg-green-50 dark:bg-green-950/20"
-                                  )}
-                                >
-                                  <div className={cn(
-                                    "w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0",
-                                    item.completed
-                                      ? "bg-green-500 text-white"
-                                      : item.isActive
-                                        ? "bg-blue-500 text-white"
-                                        : "bg-gray-200 text-gray-600"
-                                  )}>
-                                    {item.completed ? (
-                                      <Check className="h-2 w-2" />
-                                    ) : (
-                                      itemIndex + 1
+                              {section.items.map((item, itemIndex) => {
+                                const isLocked = course ? !canAccessLesson(course.id, item.id) : false;
+                                return (
+                                  <button
+                                    key={item.id}
+                                    onClick={() => setActiveItem(item.id)}
+                                    disabled={isLocked}
+                                    className={cn(
+                                      "w-full flex items-center space-x-2 p-2 rounded-lg text-left transition-all duration-200",
+                                      item.isActive
+                                        ? "bg-blue-50 border border-blue-200 dark:bg-blue-950/20"
+                                        : isLocked
+                                          ? "opacity-50 cursor-not-allowed"
+                                          : "hover:bg-gray-50 dark:hover:bg-gray-700",
+                                      item.completed && "bg-green-50 dark:bg-green-950/20"
                                     )}
-                                  </div>
-                                  <span className={cn(
-                                    "text-sm truncate",
-                                    item.isActive && "font-medium text-blue-700 dark:text-blue-300",
-                                    item.completed && "text-green-700 dark:text-green-300"
-                                  )}>
-                                    {item.title}
-                                  </span>
-                                </button>
-                              ))}
+                                  >
+                                    <div className={cn(
+                                      "w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0",
+                                      item.completed
+                                        ? "bg-green-500 text-white"
+                                        : item.isActive
+                                          ? "bg-blue-500 text-white"
+                                          : isLocked
+                                            ? "bg-gray-300 text-gray-500"
+                                            : "bg-gray-200 text-gray-600"
+                                    )}>
+                                      {item.completed ? (
+                                        <Check className="h-2 w-2" />
+                                      ) : isLocked ? (
+                                        <Lock className="h-2 w-2" />
+                                      ) : (
+                                        itemIndex + 1
+                                      )}
+                                    </div>
+                                    <span className={cn(
+                                      "text-sm truncate",
+                                      item.isActive && "font-medium text-blue-700 dark:text-blue-300",
+                                      item.completed && "text-green-700 dark:text-green-300",
+                                      isLocked && "text-gray-400"
+                                    )}>
+                                      {item.title}
+                                    </span>
+                                  </button>
+                                );
+                              })}
                             </div>
                           )}
                         </div>
                       ))}
+                      
+                      {/* Final Exam Section - Mobile */}
+                      {course?.finalExam && (
+                        <div className="space-y-2 pt-4 border-t border-gray-200 dark:border-gray-600">
+                          <button
+                            onClick={startExam}
+                            disabled={!examUnlocked}
+                            className={cn(
+                              "w-full flex items-center space-x-2 p-2 rounded-lg text-left transition-all duration-200",
+                              showExam
+                                ? "bg-purple-50 border border-purple-200 dark:bg-purple-950/20"
+                                : examUnlocked
+                                  ? "hover:bg-gray-50 dark:hover:bg-gray-700"
+                                  : "opacity-50 cursor-not-allowed",
+                              course.finalExam.completed && "bg-green-50 dark:bg-green-950/20"
+                            )}
+                          >
+                            <div className={cn(
+                              "w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0",
+                              course.finalExam.completed
+                                ? "bg-green-500 text-white"
+                                : showExam
+                                  ? "bg-purple-500 text-white"
+                                  : examUnlocked
+                                    ? "bg-purple-200 text-purple-700"
+                                    : "bg-gray-300 text-gray-500"
+                            )}>
+                              {course.finalExam.completed ? (
+                                <Check className="h-2 w-2" />
+                              ) : !examUnlocked ? (
+                                <Lock className="h-2 w-2" />
+                              ) : (
+                                <Trophy className="h-2 w-2" />
+                              )}
+                            </div>
+                            <span className={cn(
+                              "text-sm font-medium truncate",
+                              showExam && "text-purple-700 dark:text-purple-300",
+                              course.finalExam.completed && "text-green-700 dark:text-green-300",
+                              !examUnlocked && "text-gray-400"
+                            )}>
+                              Final Exam
+                            </span>
+                            {!examUnlocked && (
+                              <Badge className="ml-auto bg-gray-200 text-gray-600 text-xs">
+                                Locked
+                              </Badge>
+                            )}
+                          </button>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
 
