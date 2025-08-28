@@ -16,4 +16,4 @@ Student learning playground Dashboard functinality
 - Yesterday I removed unnecessary feature and enhence ui and functionality.
 - Today I continue to improve functionality, Attractive user interface and Responsiveness of the course section and I also organize 
    how this task going to be completed and working on course section page ahead with the single course extended over view info functionality.
-- past few days I was working on course section page ahead with the single course extend over view info fucntionality.
+- past few days I was working on course section page ahead with the single course extend over view info fucntionality. and I also continue to work on this functionality make it works well as possilbe.

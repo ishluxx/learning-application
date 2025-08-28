@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, use } from "react"
-import { ChevronDown, ChevronRight, Check, ArrowLeft, Play, Pause, Volume2, Maximize, Settings, Eye, Clock, Users, Star, Award, Target, BookOpen, Trophy, Zap, Menu, X, Lock, CheckCircle } from "lucide-react"
+import { ChevronDown, ChevronRight, Check, ArrowLeft, Play, Pause, Eye, Clock, Users, Star, Award, Target, BookOpen, Trophy, Zap, Menu, X, Lock, CheckCircle } from "lucide-react"
 import { AppSidebar } from "@/components/student/app-sidebar"
 import { SiteHeader } from "@/components/student/site-header"
 import { Button } from "@/components/ui/button"
@@ -9,9 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { coursesData, Course, CourseItem, CourseSection, updateCourseProgress, setActiveLesson, getNextLesson, getPreviousLesson, updateLessonLocks, canAccessLesson, isExamUnlocked } from "@/data/courses"
+import { generateLearningObjectives, generatePrerequisites } from "@/data/courses"
 
 export default function CourseLearningPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
   const params = use(paramsPromise)
@@ -199,41 +199,7 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
 
   const progressPercentage = (currentTime / duration) * 100
 
-  // Generate dynamic learning objectives based on course content
-  const generateLearningObjectives = (course: Course) => {
-    const baseObjectives = [
-      `Master ${course.title} fundamentals`,
-      `Apply ${course.level.toLowerCase()} level concepts`,
-      `Build practical skills in ${course.duration}`,
-      `Complete hands-on projects and exercises`
-    ]
-    return baseObjectives
-  }
 
-  // Generate prerequisites based on course level and title
-  const generatePrerequisites = (course: Course) => {
-    const levelPrereqs = {
-      'Beginner': [
-        'Basic computer skills',
-        'Text editor familiarity',
-        'Willingness to learn',
-        'Internet connection'
-      ],
-      'Intermediate': [
-        'Programming fundamentals',
-        'Development environment setup',
-        'Version control basics',
-        'Problem-solving skills'
-      ],
-      'Advanced': [
-        'Solid programming foundation',
-        'Industry experience preferred',
-        'Complex problem-solving skills',
-        'Advanced tooling knowledge'
-      ]
-    }
-    return levelPrereqs[course.level as keyof typeof levelPrereqs] || levelPrereqs['Beginner']
-  }
 
   // Calculate study statistics
   const studyStats = {
@@ -374,7 +340,46 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                       </CardContent>
                     </Card>
                   )}
+ {/* Enhanced Learning Content Grid */}
+                  {currentItem?.id === sections[0]?.items[0]?.id && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+                      <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-gray-300 dark:from-blue-950/20 dark:to-cyan-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                        <CardHeader className="pb-3 sm:pb-4">
+                          <CardTitle className="text-lg sm:text-xl flex items-center text-blue-700 dark:text-blue-300 font-bold">
+                            🎯 Learning Objectives
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3 sm:space-y-4">
+                          {generateLearningObjectives(course).map((objective, index) => (
+                            <div key={index} className="flex items-start space-x-3 sm:space-x-4">
+                              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mt-0.5 shadow-md flex-shrink-0">
+                                <span className="text-white text-xs sm:text-sm font-bold">{index + 1}</span>
+                              </div>
+                              <span className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 font-medium leading-relaxed">{objective}</span>
+                            </div>
+                          ))}
+                        </CardContent>
+                      </Card>
 
+                      <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-gray-300 dark:from-purple-950/20 dark:to-pink-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                        <CardHeader className="pb-3 sm:pb-4">
+                          <CardTitle className="text-lg sm:text-xl flex items-center text-purple-700 dark:text-purple-300 font-bold">
+                            📋 Prerequisites
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3 sm:space-y-4">
+                          {generatePrerequisites(course).map((prereq, index) => (
+                            <div key={index} className="flex items-start space-x-3 sm:space-x-4">
+                              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-600 rounded-full flex items-center justify-center mt-0.5 shadow-md flex-shrink-0">
+                                <Check className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                              </div>
+                              <span className="text-xs sm:text-sm text-purple-700 dark:text-purple-300 font-medium leading-relaxed">{prereq}</span>
+                            </div>
+                          ))}
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
                   {/* Final Exam Interface */}
                   {showExam && course?.finalExam && (
                     <Card className="shadow-2xl border-0 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20 rounded-2xl">
@@ -518,62 +523,9 @@ export default function CourseLearningPage({ params: paramsPromise }: { params: 
                     </Card>
                   )}
 
-                  {/* Enhanced Learning Content Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-                    <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-gray-300 dark:from-blue-950/20 dark:to-cyan-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <CardHeader className="pb-3 sm:pb-4">
-                        <CardTitle className="text-lg sm:text-xl flex items-center text-blue-700 dark:text-blue-300 font-bold">
-                          🎯 Learning Objectives
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-3 sm:space-y-4">
-                        {generateLearningObjectives(course).map((objective, index) => (
-                          <div key={index} className="flex items-start space-x-3 sm:space-x-4">
-                            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mt-0.5 shadow-md flex-shrink-0">
-                              <span className="text-white text-xs sm:text-sm font-bold">{index + 1}</span>
-                            </div>
-                            <span className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 font-medium leading-relaxed">{objective}</span>
-                          </div>
-                        ))}
-                      </CardContent>
-                    </Card>
+                  
 
-                    <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-gray-300 dark:from-purple-950/20 dark:to-pink-950/20 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <CardHeader className="pb-3 sm:pb-4">
-                        <CardTitle className="text-lg sm:text-xl flex items-center text-purple-700 dark:text-purple-300 font-bold">
-                          📋 Prerequisites
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-3 sm:space-y-4">
-                        {generatePrerequisites(course).map((prereq, index) => (
-                          <div key={index} className="flex items-start space-x-3 sm:space-x-4">
-                            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-600 rounded-full flex items-center justify-center mt-0.5 shadow-md flex-shrink-0">
-                              <Check className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
-                            </div>
-                            <span className="text-xs sm:text-sm text-purple-700 dark:text-purple-300 font-medium leading-relaxed">{prereq}</span>
-                          </div>
-                        ))}
-                      </CardContent>
-                    </Card>
-                  </div>
 
-                  {/* Enhanced Lesson Content */}
-                  {currentItem?.content && (
-                    <Card className="shadow-lg border-gray-300 hover:shadow-xl transition-all duration-300">
-                      <CardHeader className="pb-3 sm:pb-4">
-                        <CardTitle className="text-lg sm:text-xl flex items-center font-bold">
-                          📚 Lesson Content
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="prose dark:prose-invert max-w-none prose-sm sm:prose-base">
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line text-sm sm:text-base">
-                            {currentItem.content}
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
 
                   {/* Enhanced Navigation */}
                   <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
